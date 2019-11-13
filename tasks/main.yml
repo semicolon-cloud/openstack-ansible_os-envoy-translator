@@ -1,0 +1,94 @@
+---
+# Copyright 2016, Rackspace US, Inc.
+#
+# (C) 2016 Michael Rice <michael.rice@rackspace.com>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+- name: Gather variables for each operating system
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution | lower }}-{{ ansible_distribution_version | lower }}.yml"
+    - "{{ ansible_distribution | lower }}-{{ ansible_distribution_major_version | lower }}.yml"
+    - "{{ ansible_os_family | lower }}-{{ ansible_distribution_major_version | lower }}.yml"
+    - "{{ ansible_distribution | lower }}.yml"
+    - "{{ ansible_os_family | lower }}-{{ ansible_distribution_version.split('.')[0] }}.yml"
+    - "{{ ansible_os_family | lower }}.yml"
+  tags:
+    - always
+
+- name: Check init system
+  command: cat /proc/1/comm
+  changed_when: false
+  register: _pid1_name
+  tags:
+    - always
+
+- name: Set the name of pid1
+  set_fact:
+    pid1_name: "{{ _pid1_name.stdout }}"
+  tags:
+    - always
+
+- include: adjutant_pre_install.yml
+  tags:
+    - adjutant-install
+
+- name: Install the python venv
+  import_role:
+    name: "python_venv_build"
+  vars:
+    venv_python_executable: "{{ adjutant_venv_python_executable }}"
+    venv_build_distro_package_list: "{{ adjutant_devel_distro_packages }}"
+    venv_install_destination_path: "{{ adjutant_bin | dirname }}"
+    venv_install_distro_package_list: "{{ adjutant_distro_packages }}"
+    venv_pip_install_args: "{{ adjutant_pip3_install_args }}"
+    venv_pip_packages: "{{ adjutant_pip3_packages }}"
+    venv_facts_when_changed:
+      - section: "adjutant"
+        option: "venv_tag"
+        value: "{{ adjutant_venv_tag }}"
+    venv_rebuild: "{{ adjutant_venv_rebuild | default('no') }}"
+    venv_wheel_build_enable: false
+  tags:
+    - adjutant-install
+
+- include: adjutant_post_install.yml
+  static: no
+  tags:
+    - adjutant-config
+
+- include: adjutant_domain_setup.yml
+  when: inventory_hostname == groups['adjutant_all'][0]
+  tags:
+    - adjutant-config
+
+- include: adjutant_db_setup.yml
+  when: inventory_hostname == groups['adjutant_all'][0]
+  tags:
+    - adjutant-config
+
+- include: "adjutant_init_{{ ansible_service_mgr }}.yml"
+  static: no
+  tags:
+    - adjutant-setup
+
+- include: adjutant_apache.yml
+  static: no
+  when:
+    - adjutant_use_mod_wsgi | bool
+  tags:
+    - adjutant-setup
+
+- name: Flush handlers
+  meta: flush_handlers

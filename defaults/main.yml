@@ -1,0 +1,125 @@
+---
+# Copyright 2016, Rackspace US, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+## Verbosity Options
+debug: False
+
+# Set the package install state for distribution and pip packages
+# Options are 'present' and 'latest'
+adjutant_package_state: "latest"
+adjutant_pip_package_state: "latest"
+
+adjutant_service_user_name: adjutant
+
+adjutant_system_group_name: adjutant
+adjutant_system_user_name: adjutant
+adjutant_system_comment: adjutant system user
+adjutant_system_shell: /bin/false
+adjutant_system_home_folder: "/var/lib/{{ adjutant_system_user_name }}"
+
+adjutant_venv_tag: untagged
+adjutant_bin: "/openstack/venvs/adjutant-{{ adjutant_venv_tag }}/bin"
+
+# venv_download, even when true, will use the fallback method of building the
+# venv from scratch if the venv download fails.
+adjutant_venv_download: "{{ not adjutant_developer_mode | bool }}"
+adjutant_venv_download_url: http://127.0.0.1/venvs/untagged/ubuntu/adjutant.tgz
+
+adjutant_git_repo: https://git.openstack.org/openstack/adjutant
+adjutant_git_install_branch: stable/queens
+
+adjutant_developer_constraints:
+  - "git+{{ adjutant_git_repo }}@{{ adjutant_git_install_branch }}#egg=adjutant"
+
+adjutant_user_domain_name: Default
+adjutant_keystone_auth_plugin: password
+
+adjutant_galera_address: "{{ galera_address | default('127.0.0.1') }}"
+adjutant_galera_database: adjutant
+adjutant_galera_user: adjutant
+
+## Service Type and Data
+adjutant_service_region: RegionOne
+adjutant_service_name: adjutant
+adjutant_service_type: registration
+adjutant_service_port: 5050
+adjutant_service_proto: http
+adjutant_service_publicuri_proto: "{{ openstack_service_publicuri_proto | default(adjutant_service_proto) }}"
+adjutant_service_adminuri_proto: "{{ openstack_service_adminuri_proto | default(adjutant_service_proto) }}"
+adjutant_service_internaluri_proto: "{{ openstack_service_internaluri_proto | default(adjutant_service_proto) }}"
+adjutant_service_publicuri: "{{ adjutant_service_publicuri_proto }}://{{ external_lb_vip_address }}:{{ adjutant_service_port }}"
+adjutant_service_publicurl: "{{ adjutant_service_publicuri }}/"
+adjutant_service_adminuri: "{{ adjutant_service_adminuri_proto }}://{{ internal_lb_vip_address }}:{{ adjutant_service_port }}"
+adjutant_service_adminurl: "{{ adjutant_service_adminuri }}/"
+adjutant_service_internaluri: "{{ adjutant_service_internaluri_proto }}://{{ internal_lb_vip_address }}:{{ adjutant_service_port }}"
+adjutant_service_internalurl: "{{ adjutant_service_internaluri }}/"
+
+#: Set this to false to disable API service through Apache + mod_wsgi
+adjutant_use_mod_wsgi: true
+
+# Apache setup
+adjutant_apache_log_level: info
+adjutant_apache_servertokens: "Prod"
+adjutant_apache_serversignature: "Off"
+adjutant_wsgi_threads: 1
+adjutant_wsgi_processes_max: 16
+adjutant_wsgi_processes: "{{ [[ansible_processor_vcpus|default(1), 1] | max * 2, adjutant_wsgi_processes_max] | min }}"
+
+# set adjutant_ssl to true to enable SSL configuration on the adjutant containers
+adjutant_ssl: false
+adjutant_ssl_cert: /etc/ssl/certs/adjutant.pem
+adjutant_ssl_key: /etc/ssl/private/adjutant.key
+adjutant_ssl_ca_cert: /etc/ssl/certs/adjutant-ca.pem
+adjutant_ssl_protocol: "{{ ssl_protocol | default('ALL -SSLv2 -SSLv3') }}"
+adjutant_ssl_cipher_suite: "{{ ssl_cipher_suite | default('ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:RSA+AESGCM:RSA+AES:!aNULL:!MD5:!DSS') }}"
+
+# if using a self-signed certificate, set this to true to regenerate it
+adjutant_ssl_self_signed_regen: false
+adjutant_ssl_self_signed_subject: "/C=US/ST=Texas/L=San Antonio/O=IT/CN={{ internal_lb_vip_address }}/subjectAltName=IP.1={{ external_lb_vip_address }}"
+
+# Set these in user_variables to deploy custom certificates
+#adjutant_user_ssl_cert: <path to cert on ansible deployment host>
+#adjutant_user_ssl_key: <path to cert on ansible deployment host>
+#adjutant_user_ssl_ca_cert: <path to cert on ansible deployment host>
+
+adjutant_adjutant_conf_overrides: {}
+adjutant_api_init_overrides: {}
+
+## Service Name-Group Mapping
+adjutant_services:
+  adjutant-api:
+    group: adjutant_api
+    service_name: adjutant-api
+    service_enabled: "{{ adjutant_use_mod_wsgi | ternary(false, true) }}"
+    init_config_overrides: "{{ adjutant_api_init_overrides }}"
+
+adjutant_pip3_install_args: "{{ pip_install_options | default('') }}"
+adjutant_venv_rebuild: no
+
+adjutant_pip3_packages:
+  - git+git://opendev.org/openstack/adjutant.git@d00e3a0b1e93f1fbbad0025588f8f101fbd0ba21
+  - cryptography
+  - mod_wsgi
+
+adjutant_requires_pip3_packages:
+  - virtualenv
+  - python-keystoneclient
+  - httplib2
+
+# This variable is used by the repo_build process to determine
+# which host group to check for members of before building the
+# pip packages required by this role. The value is picked up
+# by the py_pkgs lookup.
+adjutant_role_project_group: adjutant_all

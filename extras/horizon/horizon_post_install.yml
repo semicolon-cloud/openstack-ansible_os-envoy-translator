@@ -1,0 +1,28 @@
+- name: Enable the adjutant-dashboard Horizon panel
+  file:
+    src: "{{ item.src }}"
+    path: "{{ item.path }}"
+    state: "{{ item.state }}"
+  notify: Restart apache2
+  with_items:
+    - src: "{{ horizon_lib_dir }}/adjutantdashboard/enabled/_10_admin_group.py"
+      path: "{{ horizon_lib_dir }}/openstack_dashboard/local/enabled/_10_admin_group.py"
+      state: "{{ (horizon_enable_adjutant_ui | bool) | ternary('link', 'absent') }}"
+    - src: "{{ horizon_lib_dir }}/adjutantdashboard/enabled/_10_project_group.py"
+      path: "{{ horizon_lib_dir }}/openstack_dashboard/local/enabled/_10_project_group.py"
+      state: "{{ (horizon_enable_adjutant_ui | bool) | ternary('link', 'absent') }}"
+    - src: "{{ horizon_lib_dir }}/adjutantdashboard/enabled/_11_admin_hashmap_panel.py"
+      path: "{{ horizon_lib_dir }}/openstack_dashboard/local/enabled/_11_admin_hashmap_panel.py"
+      state: "{{ (horizon_enable_adjutant_ui | bool) | ternary('link', 'absent') }}"
+    - src: "{{ horizon_lib_dir }}/adjutantdashboard/enabled/_11_admin_rating_panel.py"
+      path: "{{ horizon_lib_dir }}/openstack_dashboard/local/enabled/_11_admin_rating_panel.py"
+      state: "{{ (horizon_enable_adjutant_ui | bool) | ternary('link', 'absent') }}"
+    - src: "{{ horizon_lib_dir }}/adjutantdashboard/enabled/_11_project_rating_panel.py"
+      path: "{{ horizon_lib_dir }}/openstack_dashboard/local/enabled/_11_project_rating_panel.py"
+      state: "{{ (horizon_enable_adjutant_ui | bool) | ternary('link', 'absent') }}"
+    - src: "{{ horizon_lib_dir }}/adjutantdashboard/enabled/_12_project_reporting_panel.py"
+      path: "{{ horizon_lib_dir }}/openstack_dashboard/local/enabled/_12_project_reporting_panel.py"
+      state: "{{ (horizon_enable_adjutant_ui | bool) | ternary('link', 'absent') }}"
+    - src: "{{ horizon_lib_dir }}/adjutantdashboard/enabled/_13_admin_pyscripts_panel.py"
+      path: "{{ horizon_lib_dir }}/openstack_dashboard/local/enabled/_13_admin_pyscripts_panel.py"
+      state: "{{ (horizon_enable_adjutant_ui | bool) | ternary('link', 'absent') }}"

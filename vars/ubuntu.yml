@@ -1,0 +1,40 @@
+---
+# Copyright 2016, Walmart Stores, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+## APT Cache options
+cache_timeout: 600
+
+adjutant_devel_distro_packages:
+  - cmake
+  - gcc
+  - python3-dev
+  - libmysqlclient-dev
+  - libssl-dev
+
+adjutant_distro_packages:
+  - apache2
+  - apache2-utils
+  - git
+
+adjutant_system_service_name: apache2
+adjutant_apache_config:
+  - { src: "adjutant-ports.conf.j2", dest: "/etc/apache2/ports.conf" }
+  - { src: "adjutant-httpd.conf.j2", dest: "/etc/apache2/sites-available/adjutant-httpd.conf" }
+adjutant_apache_default_sites:
+  - "/etc/apache2/sites-enabled/000-default.conf"
+adjutant_apache_site_available: "/etc/apache2/sites-available/adjutant-httpd.conf"
+adjutant_apache_site_enabled: "/etc/apache2/sites-enabled/adjutant-httpd.conf"
+adjutant_apache_conf: "/etc/apache2/apache2.conf"
+adjutant_apache_security_conf: "/etc/apache2/conf-available/security.conf"
