@@ -52,12 +52,12 @@ USERNAME_IS_EMAIL: True
 
 # Keystone config
 KEYSTONE:
-    username: admin
-    password: openstack
-    project_name: admin
+    username: {{ adjutant_service_user_name }}
+    password: {{ adjutant_service_password }}
+    project_name: service
     # MUST BE V3 API:
-    auth_url: http://localhost/identity/v3
-    domain_id: default
+    auth_url: {{ keystone_service_adminurl }}
+    domain_id: {{ adjutant_user_domain_name }}
     can_edit_users: True
 
 HORIZON_URL: http://localhost:8080/
