@@ -44,9 +44,22 @@
   tags:
     - adjutant-install
 
+- name: Install distro packages
+  package:
+    pkg: virtualenv
+    state: present
+    update_cache: "{{ (ansible_pkg_mgr == 'apt') | ternary('yes', omit) }}"
+    cache_valid_time: "{{ (ansible_pkg_mgr == 'apt') | ternary(cache_timeout, omit) }}"
+  register: install_packages
+  until: install_packages|success
+  retries: 5
+  delay: 2
+  tags:
+    - adjutant-install
+
 - name: Install the python venv
   import_role:
-    name: "python_venv_build"
+    name: "ansible-role-python_venv_build"
   vars:
     venv_python_executable: "{{ adjutant_venv_python_executable }}"
     venv_build_distro_package_list: "{{ adjutant_devel_distro_packages }}"

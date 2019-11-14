@@ -76,11 +76,3 @@
   with_items:
     - { path: "/var/log/adjutant" }
   when: log_dir.rc != 0
-
-- name: Create adjutant report dir
-  file:
-    path: "{{ adjutant_output_basepath }}"
-    state: directory
-    owner: "{{ adjutant_system_user_name }}"
-    group: "{{ adjutant_system_group_name }}"
-    mode: 0755

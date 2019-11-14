@@ -20,6 +20,8 @@ adjutant_distro_packages:
   - mod_wsig
   - libmysqlclient-dev
   - openssl-devel
+  - virtualenv
+  - python-keystoneclient
 
 adjutant_system_service_name: httpd
 adjutant_apache_config:

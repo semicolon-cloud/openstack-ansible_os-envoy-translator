@@ -20,6 +20,7 @@ adjutant_devel_distro_packages:
   - cmake
   - gcc
   - python3-dev
+  - apache2-dev
   - libmysqlclient-dev
   - libssl-dev
 
@@ -27,11 +28,14 @@ adjutant_distro_packages:
   - apache2
   - apache2-utils
   - git
+  - python-keystoneclient
+  - libapache2-mod-wsgi
 
 adjutant_system_service_name: apache2
 adjutant_apache_config:
   - { src: "adjutant-ports.conf.j2", dest: "/etc/apache2/ports.conf" }
   - { src: "adjutant-httpd.conf.j2", dest: "/etc/apache2/sites-available/adjutant-httpd.conf" }
+  - { src: "adjutant-wsgi.load.j2", dest: "/etc/apache2/mods-available/wsgi.load" }
 adjutant_apache_default_sites:
   - "/etc/apache2/sites-enabled/000-default.conf"
 adjutant_apache_site_available: "/etc/apache2/sites-available/adjutant-httpd.conf"

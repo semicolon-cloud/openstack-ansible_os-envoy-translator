@@ -106,17 +106,13 @@ adjutant_services:
     init_config_overrides: "{{ adjutant_api_init_overrides }}"
 
 adjutant_pip3_install_args: "{{ pip_install_options | default('') }}"
+adjutant_venv_python_executable: python3
 adjutant_venv_rebuild: no
 
 adjutant_pip3_packages:
-  - git+git://opendev.org/openstack/adjutant.git@d00e3a0b1e93f1fbbad0025588f8f101fbd0ba21
+  - git+git://github.com/openstack/adjutant.git@d00e3a0b1e93f1fbbad0025588f8f101fbd0ba21
   - cryptography
   - mod_wsgi
-
-adjutant_requires_pip3_packages:
-  - virtualenv
-  - python-keystoneclient
-  - httplib2
 
 # This variable is used by the repo_build process to determine
 # which host group to check for members of before building the
