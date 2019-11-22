@@ -60,11 +60,11 @@ adjutant_service_publicuri_proto: "{{ openstack_service_publicuri_proto | defaul
 adjutant_service_adminuri_proto: "{{ openstack_service_adminuri_proto | default(adjutant_service_proto) }}"
 adjutant_service_internaluri_proto: "{{ openstack_service_internaluri_proto | default(adjutant_service_proto) }}"
 adjutant_service_publicuri: "{{ adjutant_service_publicuri_proto }}://{{ external_lb_vip_address }}:{{ adjutant_service_port }}"
-adjutant_service_publicurl: "{{ adjutant_service_publicuri }}/"
+adjutant_service_publicurl: "{{ adjutant_service_publicuri }}/v1/"
 adjutant_service_adminuri: "{{ adjutant_service_adminuri_proto }}://{{ internal_lb_vip_address }}:{{ adjutant_service_port }}"
-adjutant_service_adminurl: "{{ adjutant_service_adminuri }}/"
+adjutant_service_adminurl: "{{ adjutant_service_adminuri }}/v1/"
 adjutant_service_internaluri: "{{ adjutant_service_internaluri_proto }}://{{ internal_lb_vip_address }}:{{ adjutant_service_port }}"
-adjutant_service_internalurl: "{{ adjutant_service_internaluri }}/"
+adjutant_service_internalurl: "{{ adjutant_service_internaluri }}/v1/"
 
 #: Set this to false to disable API service through Apache + mod_wsgi
 adjutant_use_mod_wsgi: true

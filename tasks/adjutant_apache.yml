@@ -75,11 +75,16 @@
   notify:
     - Restart Apache
 
-- name: Enable/disable mod_ssl for apache2
+- name: Enable/disable mods for apache2
   apache2_module:
-    name: ssl
-    state: "{{ adjutant_ssl | bool | ternary('present', 'absent') }}"
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
   when:
     - ansible_pkg_mgr == 'apt'
+  with_items:
+    - name: ssl
+      state: "{{ adjutant_ssl | bool | ternary('present', 'absent') }}"
+    - name: rewrite
+      state: present
   notify:
     - Restart Apache
