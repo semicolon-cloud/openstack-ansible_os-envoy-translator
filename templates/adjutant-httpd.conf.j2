@@ -1,9 +1,7 @@
 # {{ ansible_managed }}
 
 <VirtualHost *:{{ adjutant_service_port }}>
-    RewriteEngine On
-    RewriteCond "%{HTTP_HOST}" "!(.*){{ ansible_hostname }}(.*)" [NC]
-    RewriteRule "^/?(.*)"      "{{ adjutant_service_internaluri_proto }}://{{ ansible_hostname }}:{{ adjutant_service_port }}/$1" [L,R,NE]
+    ServerName {{ ansible_hostname }}
 
     WSGIDaemonProcess     adjutant lang='en_US.UTF-8' locale='en_US.UTF-8' user={{ adjutant_system_user_name }} group={{ adjutant_system_group_name }} processes={{ adjutant_wsgi_processes }} threads={{ adjutant_wsgi_threads }} display-name=%{GROUP}
     WSGIProcessGroup      adjutant
