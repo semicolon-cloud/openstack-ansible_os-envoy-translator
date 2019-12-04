@@ -110,7 +110,7 @@ adjutant_venv_python_executable: python3
 adjutant_venv_rebuild: no
 
 adjutant_pip3_packages:
-  - git+git://github.com/openstack/adjutant.git@d00e3a0b1e93f1fbbad0025588f8f101fbd0ba21
+  - git+git://github.com/openstack/adjutant.git@d62eada1264f5f574394e3d6f1666a5f2d443f68
   - cryptography
   - mod_wsgi
 
