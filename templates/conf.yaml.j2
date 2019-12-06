@@ -57,7 +57,7 @@ KEYSTONE:
     project_name: service
     # MUST BE V3 API:
     auth_url: {{ keystone_service_adminurl }}
-    domain_id: {{ adjutant_user_domain_name }}
+    domain_id: {{ adjutant_user_domain_id }}
     can_edit_users: True
 
 HORIZON_URL: http://localhost:8080/
@@ -415,7 +415,7 @@ PROJECT_QUOTA_SIZES:
             port: 500
 
 # Time in seconds to cache token from Keystone
-TOKEN_CACHE_TIME: 600
+TOKEN_CACHE_TIME: 0
 
 # Ordered list of quota sizes from smallest to biggest
 QUOTA_SIZES_ASC:

@@ -44,6 +44,7 @@ adjutant_developer_constraints:
   - "git+{{ adjutant_git_repo }}@{{ adjutant_git_install_branch }}#egg=adjutant"
 
 adjutant_user_domain_name: Default
+adjutant_user_domain_id: default
 adjutant_keystone_auth_plugin: password
 
 adjutant_galera_address: "{{ galera_address | default('127.0.0.1') }}"
