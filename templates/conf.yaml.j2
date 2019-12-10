@@ -44,7 +44,13 @@ LOGGING:
             propagate: False
 
 EMAIL_SETTINGS:
-    EMAIL_BACKEND: django.core.mail.backends.console.EmailBackend
+    EMAIL_BACKEND: {{ adjutant_email_backend }}
+    EMAIL_HOST: {{ adjutant_email_host }}
+    EMAIL_PORT: {{ adjutant_email_port }}
+    EMAIL_HOST_USER: {{ adjutant_email_host_user }}
+    EMAIL_HOST_PASSWORD: {{ adjutant_email_host_password }}
+    EMAIL_USE_TLS: {{ adjutant_email_use_tls }}
+    EMAIL_USE_SSL: {{ adjutant_email_use_ssl }}
 
 # setting to control if user name and email are allowed
 # to have different values.
@@ -60,7 +66,7 @@ KEYSTONE:
     domain_id: {{ adjutant_user_domain_id }}
     can_edit_users: True
 
-HORIZON_URL: http://localhost:8080/
+HORIZON_URL: {{ adjutant_horizon_publicurl }}
 
 # time for the token to expire in hours
 TOKEN_EXPIRE_TIME: 24
