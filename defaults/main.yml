@@ -102,6 +102,16 @@ adjutant_email_port: 25
 adjutant_email_host_user: adjutant
 adjutant_email_use_tls: False
 adjutant_email_use_ssl: False
+adjutant_active_taskviews:
+  - RoleList
+  - SignUp
+  - UpdateProjectQuotas
+  - UserDetail
+  - UserList
+  - UserResetPassword
+  - UserRoles
+  - UserSetPassword
+  - UserUpdateEmail
 
 adjutant_adjutant_conf_overrides: {}
 adjutant_api_init_overrides: {}

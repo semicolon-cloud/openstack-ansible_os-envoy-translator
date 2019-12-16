@@ -72,15 +72,9 @@ HORIZON_URL: {{ adjutant_horizon_publicurl }}
 TOKEN_EXPIRE_TIME: 24
 
 ACTIVE_TASKVIEWS:
-    - UserRoles
-    - UserDetail
-    - UserResetPassword
-    - UserSetPassword
-    - UserList
-    - RoleList
-    - SignUp
-    - UserUpdateEmail
-    - UpdateProjectQuotas
+{% for task in adjutant_active_taskviews %}
+    - {{ task }}
+{% endfor %}
 
 DEFAULT_TASK_SETTINGS:
     emails:
