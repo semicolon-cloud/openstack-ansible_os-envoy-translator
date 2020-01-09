@@ -112,6 +112,21 @@ adjutant_active_taskviews:
   - UserRoles
   - UserSetPassword
   - UserUpdateEmail
+adjutant_role_mapping:
+  admin:
+    - project_admin
+    - project_mod
+    - heat_stack_owner
+    - _member_
+  project_admin:
+    - project_admin
+    - project_mod
+    - heat_stack_owner
+    - _member_
+  project_mod:
+    - project_mod
+    - heat_stack_owner
+    - _member_
 
 adjutant_adjutant_conf_overrides: {}
 adjutant_api_init_overrides: {}

@@ -72,9 +72,7 @@ HORIZON_URL: {{ adjutant_horizon_publicurl }}
 TOKEN_EXPIRE_TIME: 24
 
 ACTIVE_TASKVIEWS:
-{% for task in adjutant_active_taskviews %}
-    - {{ task }}
-{% endfor %}
+{{ adjutant_active_taskviews | to_nice_yaml(width=140) | indent(4, True) }}
 
 DEFAULT_TASK_SETTINGS:
     emails:
@@ -322,20 +320,7 @@ TASK_SETTINGS:
 
 # mapping between roles and managable roles
 ROLES_MAPPING:
-    admin:
-        - project_admin
-        - project_mod
-        - heat_stack_owner
-        - _member_
-    project_admin:
-        - project_admin
-        - project_mod
-        - heat_stack_owner
-        - _member_
-    project_mod:
-        - project_mod
-        - heat_stack_owner
-        - _member_
+{{ adjutant_role_mapping | to_nice_yaml(width=140) | indent(4, True) }}
 
 PROJECT_QUOTA_SIZES:
     small:
