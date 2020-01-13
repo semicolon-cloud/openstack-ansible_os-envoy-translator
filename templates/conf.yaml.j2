@@ -78,38 +78,38 @@ DEFAULT_TASK_SETTINGS:
     emails:
         initial:
             subject: Initial Confirmation
-            reply: no-reply@example.com
-            from: bounce+%(task_uuid)s@example.com
+            reply: {{ adjutant_email_reply_address }}
+            from: {{ adjutant_email_from_address }}
             template: initial.txt
             # html_template: initial.txt
         # If the related actions 'can' send a token,
         # this field should here.
         token:
             subject: Your Token
-            reply: no-reply@example.com
-            from: bounce+%(task_uuid)s@example.com
+            reply: {{ adjutant_email_reply_address }}
+            from: {{ adjutant_email_from_address }}
             template: token.txt
             # html_template: token.txt
         completed:
             subject: Task completed
-            reply: no-reply@example.com
-            from: bounce+%(task_uuid)s@example.com
+            reply: {{ adjutant_email_reply_address }}
+            from: {{ adjutant_email_from_address }}
             template: completed.txt
             # html_template: completed.txt
     notifications:
         EmailNotification:
             standard:
                 emails:
-                    - example@example.com
-                reply: no-reply@example.com
-                from: bounce+%(task_uuid)s@example.com
+                    - {{ adjutant_email_notification_address }}
+                reply: {{ adjutant_email_reply_address }}
+                from: {{ adjutant_email_from_address }}
                 template: notification.txt
                 # html_template: completed.txt
             error:
                 emails:
-                    - example@example.com
-                reply: no-reply@example.com
-                from: bounce+%(task_uuid)s@example.com
+                    - {{ adjutant_email_notification_address }}
+                reply: {{ adjutant_email_reply_address }}
+                from: {{ adjutant_email_from_address }}
                 template: notification.txt
                 # html_template: completed.txt
 
@@ -132,69 +132,78 @@ DEFAULT_ACTION_SETTINGS:
             - project_mod
             - heat_stack_owner
             - _member_
+            - creator
+            - swiftoperator
+            - load-balancer_admin
     NewProjectWithUserAction:
         default_roles:
             - project_admin
             - project_mod
             - heat_stack_owner
             - _member_
+            - creator
+            - swiftoperator
+            - load-balancer_admin
     NewUserAction:
         allowed_roles:
             - project_admin
             - project_mod
             - heat_stack_owner
             - _member_
+            - creator
+            - swiftoperator
+            - load-balancer_admin
     ResetUserPasswordAction:
         blacklisted_roles:
             - admin
     NewDefaultNetworkAction:
-        RegionOne:
+        "{{ adjutant_service_region }}":
             network_name: default_network
             subnet_name: default_subnet
             router_name: default_router
-            public_network: 3cb50d61-5bce-4c03-96e6-8e262e12bb35
+            public_network: 04b958fd-5edc-4210-a0ca-8d8b065f9ed6
             DNS_NAMESERVERS:
-                - 193.168.1.2
-                - 193.168.1.3
+                - 8.8.8.8
+                - 8.8.4.4
             SUBNET_CIDR: 192.168.1.0/24
     NewProjectDefaultNetworkAction:
-        RegionOne:
+        "{{ adjutant_service_region }}":
             network_name: default_network
             subnet_name: default_subnet
             router_name: default_router
-            public_network: 3cb50d61-5bce-4c03-96e6-8e262e12bb35
+            public_network: 04b958fd-5edc-4210-a0ca-8d8b065f9ed6
             DNS_NAMESERVERS:
-                - 193.168.1.2
-                - 193.168.1.3
+                - 8.8.8.8
+                - 8.8.4.4
             SUBNET_CIDR: 192.168.1.0/24
     AddDefaultUsersToProjectAction:
         default_users:
-            - admin
+            - cloudkitty
         default_roles:
-            - admin
+            - rating
     SetProjectQuotaAction:
         regions:
-            RegionOne:
+            "{{ adjutant_service_region }}":
                 quota_size: small
     UpdateProjectQuotasAction:
         days_between_autoapprove: 30
     SendAdditionalEmailAction:
       initial:
           email_current_user: False
-          reply: no-reply@example.com
-          from: bounce+%(task_uuid)s@example.com
+          reply: {{ adjutant_email_reply_address }}
+          from: {{ adjutant_email_from_address }}
           subject: "Openstack Email Notification"
           template: null
       token:
           email_current_user: False
-          reply: no-reply@example.com
-          from: bounce+%(task_uuid)s@example.com
+          reply: {{ adjutant_email_reply_address }}
+          from: {{ adjutant_email_from_address }}
           subject: "Openstack Email Notification"
           template: null
       completed:
           email_current_user: False
-          reply: no-reply@example.com
-          from: bounce+%(task_uuid)s@example.com
+          reply: {{ adjutant_email_reply_address }}
+          from: {{ adjutant_email_from_address }}
           subject: "Openstack Email Notification"
           template: null
           # A null template will cause the email not to send
@@ -235,11 +244,11 @@ TASK_SETTINGS:
             EmailNotification:
                 standard:
                     emails:
-                        - signups@example.com
+                        - {{ adjutant_email_signups_notification_address }}
                 error:
                     emails:
-                        - signups@example.com
-        default_region: RegionOne
+                        - {{ adjutant_email_signups_notification_address }}
+        default_region: {{ adjutant_service_region }}
         # If 'None' (null in yaml) will default to domain as parent.
         # If domain isn't set explicity will service user domain (see KEYSTONE).
         default_parent_id: null

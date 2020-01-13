@@ -98,10 +98,14 @@ adjutant_ssl_self_signed_subject: "/C=US/ST=Texas/L=San Antonio/O=IT/CN={{ inter
 
 adjutant_email_backend: django.core.mail.backends.console.EmailBackend
 adjutant_email_host: localhost
-adjutant_email_port: 25
+adjutant_email_port: 587
 adjutant_email_host_user: adjutant
-adjutant_email_use_tls: False
+adjutant_email_use_tls: True
 adjutant_email_use_ssl: False
+adjutant_email_reply_address: no-reply@example.com
+adjutant_email_from_address: bounce+%(task_uuid)s@example.com
+adjutant_email_notification_address: example@example.com
+adjutant_email_signups_notification_address: signups@example.com
 adjutant_active_taskviews:
   - RoleList
   - SignUp
