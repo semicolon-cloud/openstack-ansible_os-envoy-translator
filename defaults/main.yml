@@ -162,53 +162,53 @@ adjutant_quota_sizes:
   medium:
     cinder:
       gigabytes: 10000
-      volumes: 100
       snapshots: 300
+      volumes: 100
     nova:
-      metadata_items: 128
-      injected_file_content_bytes: 10240
+      instances: 50
+      cores: 100
       ram: 327680
       floating_ips: 25
-      key_pairs: 50
-      instances: 50
-      security_group_rules: 400
-      injected_files: 5
-      cores: 100
       fixed_ips: 0
+      metadata_items: 128
+      injected_files: 5
+      injected_file_content_bytes: 10240
+      key_pairs: 50
       security_groups: 50
+      security_group_rules: 400
     neutron:
+      floatingip: 25
+      network: 5
+      port: 250
+      router: 5
+      security_group: 50
       security_group_rule: 400
       subnet: 5
-      network: 5
-      floatingip: 25
-      security_group: 50
-      router: 5
-      port: 250
   large:
     cinder:
       gigabytes: 50000
-      volumes: 200
       snapshots: 600
+      volumes: 200
     nova:
-      metadata_items: 128
-      injected_file_content_bytes: 10240
+      instances: 100
+      cores: 200
       ram: 655360
       floating_ips: 50
-      key_pairs: 50
-      instances: 100
-      security_group_rules: 800
-      injected_files: 5
-      cores: 200
       fixed_ips: 0
+      metadata_items: 128
+      injected_files: 5
+      injected_file_content_bytes: 10240
+      key_pairs: 50
       security_groups: 100
+      security_group_rules: 800
     neutron:
+      floatingip: 50
+      network: 10
+      port: 500
+      router: 10
+      security_group: 100
       security_group_rule: 800
       subnet: 10
-      network: 10
-      floatingip: 50
-      security_group: 100
-      router: 10
-      port: 500
 
 adjutant_quota_sizes_asc:
   - small
