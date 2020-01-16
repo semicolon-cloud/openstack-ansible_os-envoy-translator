@@ -132,7 +132,8 @@ adjutant_role_mapping:
     - heat_stack_owner
     - _member_
 adjutant_default_quota_size: small
-adjutant_quota_autoapprove_days: 30
+adjutant_quota_allow_auto_approve: False
+adjutant_quota_auto_approve_days: 30
 adjutant_quota_sizes:
   small:
     cinder:

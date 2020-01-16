@@ -72,7 +72,7 @@ HORIZON_URL: {{ adjutant_horizon_publicurl }}
 TOKEN_EXPIRE_TIME: 24
 
 ACTIVE_TASKVIEWS:
-{{ adjutant_active_taskviews | to_nice_yaml(width=140) | indent(2, True) }}
+{{ adjutant_active_taskviews | to_nice_yaml(indent=2, width=140) | indent(2, True) }}
 
 DEFAULT_TASK_SETTINGS:
   emails:
@@ -186,7 +186,7 @@ DEFAULT_ACTION_SETTINGS:
       "{{ adjutant_service_region }}":
         quota_size: {{ adjutant_default_quota_size }}
   UpdateProjectQuotasAction:
-    days_between_autoapprove: {{ adjutant_quota_autoapprove_days }}
+    days_between_autoapprove: {{ adjutant_quota_auto_approve_days }}
   SendAdditionalEmailAction:
     initial:
       email_current_user: False
@@ -318,6 +318,7 @@ TASK_SETTINGS:
           template: email_update_started.txt
           email_current_user: True
   update_quota:
+    allow_auto_approve: {{ adjutant_quota_allow_auto_approve | bool }}
     duplicate_policy: cancel
     size_difference_threshold: 0.1
     emails:
@@ -329,18 +330,18 @@ TASK_SETTINGS:
 
 # mapping between roles and managable roles
 ROLES_MAPPING:
-{{ adjutant_role_mapping | to_nice_yaml(width=140) | indent(2, True) }}
+{{ adjutant_role_mapping | to_nice_yaml(indent=2, width=140) | indent(2, True) }}
 
 PROJECT_QUOTA_SIZES:
-{{ adjutant_quota_sizes | to_nice_yaml(width=140) | indent(2, True) }}
+{{ adjutant_quota_sizes | to_nice_yaml(indent=2, width=140) | indent(2, True) }}
 
 # Time in seconds to cache token from Keystone
 TOKEN_CACHE_TIME: 0
 
 # Ordered list of quota sizes from smallest to biggest
 QUOTA_SIZES_ASC:
-{{ adjutant_quota_sizes_asc | to_nice_yaml(width=140) | indent(2, True) }}
+{{ adjutant_quota_sizes_asc | to_nice_yaml(indent=2, width=140) | indent(2, True) }}
 
 # Services to check through the quotas for
 QUOTA_SERVICES:
-{{ adjutant_quota_services | to_nice_yaml(width=140) | indent(2, True) }}
+{{ adjutant_quota_services | to_nice_yaml(indent=2, width=140) | indent(2, True) }}
