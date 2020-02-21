@@ -156,6 +156,7 @@ DEFAULT_ACTION_SETTINGS:
   ResetUserPasswordAction:
     blacklisted_roles:
       - admin
+      - rating
   NewDefaultNetworkAction:
     "{{ adjutant_service_region }}":
       network_name: default_network
@@ -294,6 +295,7 @@ TASK_SETTINGS:
       token: null
     role_blacklist:
       - admin
+      - rating
   edit_roles:
     duplicate_policy: cancel
     emails:
