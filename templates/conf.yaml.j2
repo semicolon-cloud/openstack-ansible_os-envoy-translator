@@ -134,7 +134,7 @@ DEFAULT_ACTION_SETTINGS:
       - _member_
       - creator
       - swiftoperator
-      - load-balancer_admin
+      - load-balancer_member
   NewProjectWithUserAction:
     default_roles:
       - project_admin
@@ -143,7 +143,7 @@ DEFAULT_ACTION_SETTINGS:
       - _member_
       - creator
       - swiftoperator
-      - load-balancer_admin
+      - load-balancer_member
   NewUserAction:
     allowed_roles:
       - project_admin
@@ -152,7 +152,7 @@ DEFAULT_ACTION_SETTINGS:
       - _member_
       - creator
       - swiftoperator
-      - load-balancer_admin
+      - load-balancer_member
   ResetUserPasswordAction:
     blacklisted_roles:
       - admin
@@ -230,6 +230,7 @@ TASK_SETTINGS:
     # These will run after the default actions, in the given order.
     additional_actions:
       - NewProjectDefaultNetworkAction
+      - AddDefaultUsersToProjectAction
       - SetProjectQuotaAction
     emails:
       initial:
