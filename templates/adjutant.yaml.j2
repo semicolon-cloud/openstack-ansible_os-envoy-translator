@@ -27,7 +27,7 @@ identity:
   can_edit_users: True
   username_is_email: True
   role_mapping:
-  {{ adjutant_role_mapping | to_nice_yaml(indent=2, width=140) | indent(2, True) }}
+{{ adjutant_role_mapping | to_nice_yaml(indent=2, width=140) | indent(4, True) }}
   auth:
     username: {{ adjutant_service_user_name }}
     password: {{ adjutant_service_password }}
@@ -38,7 +38,7 @@ identity:
 
 api:
   active_delegate_apis:
-  {{ adjutant_active_delegate_apis | to_nice_yaml(indent=2, width=140) | indent(2, True) }}
+{{ adjutant_active_delegate_apis | to_nice_yaml(indent=2, width=140) | indent(4, True) }}
   delegate_apis:
     CreateProjectAndUser:
       default_region: {{ adjutant_service_region }}
@@ -102,15 +102,15 @@ workflow:
   action_defaults:
     NewProjectAction:
       default_roles:
-      {{ adjutant_role_mapping.project_admin | to_nice_yaml(indent=2, width=140) | indent(2, True) }}
+{{ adjutant_role_mapping.project_admin | to_nice_yaml(indent=2, width=140) | indent(8, True) }}
     NewProjectWithUserAction:
       default_roles:
-      {{ adjutant_role_mapping.project_admin | to_nice_yaml(indent=2, width=140) | indent(2, True) }}
+{{ adjutant_role_mapping.project_admin | to_nice_yaml(indent=2, width=140) | indent(8, True) }}
     AddDefaultUsersToProjectAction:
       default_users:
-      {{ adjutant_default_users_to_project_action | to_nice_yaml(indent=2, width=140) | indent(2, True) }}
+{{ adjutant_default_users_to_project_action | to_nice_yaml(indent=2, width=140) | indent(8, True) }}
       default_roles:
-      {{ adjutant_default_roles_to_project_action | to_nice_yaml(indent=2, width=140) | indent(2, True) }}
+{{ adjutant_default_roles_to_project_action | to_nice_yaml(indent=2, width=140) | indent(8, True) }}
     NewDefaultNetworkAction:
       region_defaults:
         network_name: default_network
@@ -259,8 +259,8 @@ workflow:
 
 quota:
   sizes:
-  {{ adjutant_quota_sizes | to_nice_yaml(indent=2, width=140) | indent(2, True) }}
+{{ adjutant_quota_sizes | to_nice_yaml(indent=2, width=140) | indent(4, True) }}
   sizes_ascending:
-  {{ adjutant_quota_sizes_asc | to_nice_yaml(indent=2, width=140) | indent(2, True) }}
+{{ adjutant_quota_sizes_asc | to_nice_yaml(indent=2, width=140) | indent(4, True) }}
   services:
-  {{ adjutant_quota_services | to_nice_yaml(indent=2, width=140) | indent(2, True) }}
+{{ adjutant_quota_services | to_nice_yaml(indent=2, width=140) | indent(4, True) }}
