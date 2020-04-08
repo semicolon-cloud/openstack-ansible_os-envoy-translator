@@ -106,7 +106,7 @@ adjutant_email_reply_address: no-reply@example.com
 adjutant_email_from_address: bounce+%(task_uuid)s@example.com
 adjutant_email_notification_address: example@example.com
 adjutant_email_signups_notification_address: signups@example.com
-adjutant_active_taskviews:
+adjutant_active_delegate_apis:
   - RoleList
   - SignUp
   - UpdateProjectQuotas
@@ -114,7 +114,6 @@ adjutant_active_taskviews:
   - UserList
   - UserResetPassword
   - UserRoles
-  - UserSetPassword
   - UserUpdateEmail
 adjutant_role_mapping:
   admin:
@@ -131,8 +130,12 @@ adjutant_role_mapping:
     - project_mod
     - heat_stack_owner
     - _member_
+adjutant_default_users_to_project_action: []
+adjutant_default_roles_to_project_action: []
 adjutant_default_quota_size: small
+adjutant_signup_allow_auto_approve: False
 adjutant_quota_allow_auto_approve: False
+adjutant_quota_size_difference_threshold: 0.1
 adjutant_quota_auto_approve_days: 30
 adjutant_quota_sizes:
   small:
@@ -140,18 +143,6 @@ adjutant_quota_sizes:
       gigabytes: 5000
       snapshots: 50
       volumes: 20
-    nova:
-      instances: 10
-      cores: 20
-      ram: 65536
-      floating_ips: 10
-      fixed_ips: 0
-      metadata_items: 128
-      injected_files: 5
-      injected_file_content_bytes: 10240
-      key_pairs: 50
-      security_groups: 20
-      security_group_rules: 100
     neutron:
       floatingip: 10
       network: 3
@@ -160,23 +151,29 @@ adjutant_quota_sizes:
       security_group: 20
       security_group_rule: 100
       subnet: 3
+    nova:
+      cores: 20
+      fixed_ips: 0
+      floating_ips: 10
+      injected_file_content_bytes: 10240
+      injected_files: 5
+      instances: 10
+      key_pairs: 50
+      metadata_items: 128
+      ram: 65536
+      security_group_rules: 100
+      security_groups: 20
+    octavia:
+      health_monitor: 5
+      listener: 1
+      load_balancer: 1
+      member: 2
+      pool: 1
   medium:
     cinder:
       gigabytes: 10000
       snapshots: 300
       volumes: 100
-    nova:
-      instances: 50
-      cores: 100
-      ram: 327680
-      floating_ips: 25
-      fixed_ips: 0
-      metadata_items: 128
-      injected_files: 5
-      injected_file_content_bytes: 10240
-      key_pairs: 50
-      security_groups: 50
-      security_group_rules: 400
     neutron:
       floatingip: 25
       network: 5
@@ -185,23 +182,29 @@ adjutant_quota_sizes:
       security_group: 50
       security_group_rule: 400
       subnet: 5
+    nova:
+      cores: 100
+      fixed_ips: 0
+      floating_ips: 25
+      injected_file_content_bytes: 10240
+      injected_files: 5
+      instances: 50
+      key_pairs: 50
+      metadata_items: 128
+      ram: 327680
+      security_group_rules: 400
+      security_groups: 50
+    octavia:
+      health_monitor: 50
+      listener: 5
+      load_balancer: 5
+      member: 5
+      pool: 5
   large:
     cinder:
       gigabytes: 50000
       snapshots: 600
       volumes: 200
-    nova:
-      instances: 100
-      cores: 200
-      ram: 655360
-      floating_ips: 50
-      fixed_ips: 0
-      metadata_items: 128
-      injected_files: 5
-      injected_file_content_bytes: 10240
-      key_pairs: 50
-      security_groups: 100
-      security_group_rules: 800
     neutron:
       floatingip: 50
       network: 10
@@ -210,6 +213,24 @@ adjutant_quota_sizes:
       security_group: 100
       security_group_rule: 800
       subnet: 10
+    nova:
+      cores: 200
+      fixed_ips: 0
+      floating_ips: 50
+      injected_file_content_bytes: 10240
+      injected_files: 5
+      instances: 100
+      key_pairs: 50
+      metadata_items: 128
+      ram: 655360
+      security_group_rules: 800
+      security_groups: 100
+    octavia:
+      health_monitor: 100
+      listener: 10
+      load_balancer: 10
+      member: 10
+      pool: 10
 
 adjutant_quota_sizes_asc:
   - small
@@ -239,7 +260,7 @@ adjutant_venv_python_executable: python3
 adjutant_venv_rebuild: no
 
 adjutant_pip3_packages:
-  - git+git://github.com/openstack/adjutant.git@d62eada1264f5f574394e3d6f1666a5f2d443f68
+  - python-adjutant==0.5.0
   - cryptography
   - mod_wsgi
 

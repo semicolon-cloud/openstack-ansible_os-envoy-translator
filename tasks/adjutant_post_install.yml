@@ -25,8 +25,8 @@
     config_overrides: "{{ item.config_overrides }}"
     config_type: "{{ item.config_type }}"
   with_items:
-    - src: "conf.yaml.j2"
-      dest: "/etc/adjutant/conf.yaml"
+    - src: "adjutant.yaml.j2"
+      dest: "/etc/adjutant/adjutant.yaml"
       config_overrides: "{{ adjutant_adjutant_conf_overrides }}"
       config_type: "yaml"
   notify:
