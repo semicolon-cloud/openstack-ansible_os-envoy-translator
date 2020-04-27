@@ -130,6 +130,9 @@ adjutant_role_mapping:
     - project_mod
     - heat_stack_owner
     - _member_
+adjutant_blacklisted_roles:
+  - admin
+  - rating
 adjutant_default_users_to_project_action: []
 adjutant_default_roles_to_project_action: []
 adjutant_default_quota_size: small

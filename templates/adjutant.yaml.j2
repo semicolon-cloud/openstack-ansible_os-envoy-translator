@@ -45,16 +45,13 @@ api:
       default_domain_id: default
     UserList:
       blacklisted_roles:
-        - admin
-        - rating
+{{ adjutant_blacklisted_roles | to_nice_yaml(indent=2, width=140) | indent(8, True) }}
     UserDetail:
       blacklisted_roles:
-        - admin
-        - rating
+{{ adjutant_blacklisted_roles | to_nice_yaml(indent=2, width=140) | indent(8, True) }}
     UserRoles:
       blacklisted_roles:
-        - admin
-        - rating
+{{ adjutant_blacklisted_roles | to_nice_yaml(indent=2, width=140) | indent(8, True) }}
     SignUp:
       default_region: {{ adjutant_service_region }}
       default_domain_id: default
@@ -143,8 +140,7 @@ workflow:
       days_between_autoapprove: {{ adjutant_quota_auto_approve_days }}
     ResetUserPasswordAction:
       blacklisted_roles:
-        - admin
-        - rating
+{{ adjutant_blacklisted_roles | to_nice_yaml(indent=2, width=140) | indent(8, True) }}
     SendAdditionalEmailAction:
       prepare:
         subject: Openstack Email Notification
