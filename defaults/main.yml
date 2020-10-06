@@ -32,16 +32,12 @@ adjutant_system_home_folder: "/var/lib/{{ adjutant_system_user_name }}"
 adjutant_venv_tag: untagged
 adjutant_bin: "/openstack/venvs/adjutant-{{ adjutant_venv_tag }}/bin"
 
-# venv_download, even when true, will use the fallback method of building the
-# venv from scratch if the venv download fails.
-adjutant_venv_download: "{{ not adjutant_developer_mode | bool }}"
-adjutant_venv_download_url: http://127.0.0.1/venvs/untagged/ubuntu/adjutant.tgz
-
 adjutant_git_repo: https://opendev.org/openstack/adjutant
-adjutant_git_install_branch: stable/queens
-
-adjutant_developer_constraints:
+adjutant_git_install_branch: master
+adjutant_upper_constraints_url: "{{ requirements_git_url | default('https://releases.openstack.org/constraints/upper/' ~ requirements_git_install_branch | default('master')) }}"
+adjutant_git_constraints:
   - "git+{{ adjutant_git_repo }}@{{ adjutant_git_install_branch }}#egg=adjutant"
+  - "--constraint {{ adjutant_upper_constraints_url }}"
 
 adjutant_user_domain_name: Default
 adjutant_user_domain_id: default
@@ -50,12 +46,24 @@ adjutant_keystone_auth_plugin: password
 adjutant_galera_address: "{{ galera_address | default('127.0.0.1') }}"
 adjutant_galera_database: adjutant
 adjutant_galera_user: adjutant
+adjutant_galera_use_ssl: "{{ galera_use_ssl | default(False) }}"
+adjutant_galera_ssl_ca_cert: "{{ galera_ssl_ca_cert | default('/etc/ssl/certs/galera-ca.pem') }}"
+adjutant_galera_port: 3306
+adjutant_galera_setup_host: "{{ openstack_db_setup_host | default('localhost') }}"
+adjutant_galera_setup_python_interpreter: "{{ openstack_db_setup_python_interpreter | default((adjutant_galera_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_python['executable'])) }}"
 
 ## Service Type and Data
+adjutant_role_name: admin
 adjutant_service_region: RegionOne
 adjutant_service_name: adjutant
 adjutant_service_type: registration
+adjutant_service_description: "Adjutant Registration Service"
 adjutant_service_port: 5050
+adjutant_service_project_name: service
+adjutant_service_in_ldap: false
+adjutant_service_setup_host: "{{ openstack_service_setup_host | default('localhost') }}"
+adjutant_service_setup_host_python_interpreter: "{{ openstack_service_setup_host_python_interpreter | default((adjutant_service_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_python['executable'])) }}"
+adjutant_bind_address: "{{ openstack_service_bind_address | default('0.0.0.0') }}"
 adjutant_service_proto: http
 adjutant_service_publicuri_proto: "{{ openstack_service_publicuri_proto | default(adjutant_service_proto) }}"
 adjutant_service_adminuri_proto: "{{ openstack_service_adminuri_proto | default(adjutant_service_proto) }}"
@@ -68,33 +76,11 @@ adjutant_service_internaluri: "{{ adjutant_service_internaluri_proto }}://{{ int
 adjutant_service_internalurl: "{{ adjutant_service_internaluri }}/v1/"
 adjutant_horizon_publicurl: "{{ openstack_service_publicuri_proto | default(adjutant_service_proto) }}://{{ external_lb_vip_address }}/"
 
-#: Set this to false to disable API service through Apache + mod_wsgi
-adjutant_use_mod_wsgi: true
-
-# Apache setup
-adjutant_apache_log_level: info
-adjutant_apache_servertokens: "Prod"
-adjutant_apache_serversignature: "Off"
+# uWSGI settings
 adjutant_wsgi_threads: 1
 adjutant_wsgi_processes_max: 16
 adjutant_wsgi_processes: "{{ [[ansible_processor_vcpus|default(1), 1] | max * 2, adjutant_wsgi_processes_max] | min }}"
-
-# set adjutant_ssl to true to enable SSL configuration on the adjutant containers
-adjutant_ssl: false
-adjutant_ssl_cert: /etc/ssl/certs/adjutant.pem
-adjutant_ssl_key: /etc/ssl/private/adjutant.key
-adjutant_ssl_ca_cert: /etc/ssl/certs/adjutant-ca.pem
-adjutant_ssl_protocol: "{{ ssl_protocol | default('ALL -SSLv2 -SSLv3') }}"
-adjutant_ssl_cipher_suite: "{{ ssl_cipher_suite | default('ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:RSA+AESGCM:RSA+AES:!aNULL:!MD5:!DSS') }}"
-
-# if using a self-signed certificate, set this to true to regenerate it
-adjutant_ssl_self_signed_regen: false
-adjutant_ssl_self_signed_subject: "/C=US/ST=Texas/L=San Antonio/O=IT/CN={{ internal_lb_vip_address }}/subjectAltName=IP.1={{ external_lb_vip_address }}"
-
-# Set these in user_variables to deploy custom certificates
-#adjutant_user_ssl_cert: <path to cert on ansible deployment host>
-#adjutant_user_ssl_key: <path to cert on ansible deployment host>
-#adjutant_user_ssl_ca_cert: <path to cert on ansible deployment host>
+adjutant_use_uwsgi: True
 
 adjutant_email_backend: django.core.mail.backends.smtp.EmailBackend
 adjutant_email_host: localhost
@@ -239,6 +225,7 @@ adjutant_quota_sizes_asc:
   - small
   - medium
   - large
+
 adjutant_quota_services:
   "*":
     - cinder
@@ -248,6 +235,7 @@ adjutant_quota_services:
     # - octavia
 
 adjutant_adjutant_conf_overrides: {}
+adjutant_api_uwsgi_ini_overrides: {}
 adjutant_api_init_overrides: {}
 
 ## Service Name-Group Mapping
@@ -255,20 +243,19 @@ adjutant_services:
   adjutant-api:
     group: adjutant_api
     service_name: adjutant-api
-    service_enabled: "{{ adjutant_use_mod_wsgi | ternary(false, true) }}"
+    service_enabled: true
     init_config_overrides: "{{ adjutant_api_init_overrides }}"
+    execstarts: "{{ adjutant_bin }}/adjutant-api"
+    wsgi_app: "{{ adjutant_use_uwsgi }}"
+    wsgi_name: adjutant-api-wsgi
+    uwsgi_overrides: "{{ adjutant_api_uwsgi_ini_overrides }}"
+    uwsgi_bind_address: "{{ adjutant_bind_address }}"
+    uwsgi_port: "{{ adjutant_service_port }}"
 
-adjutant_pip3_install_args: "{{ pip_install_options | default('') }}"
-adjutant_venv_python_executable: python3
-adjutant_venv_rebuild: no
+adjutant_pip_install_args: "{{ pip_install_options | default('') }}"
+adjutant_venv_python_executable: "{{ openstack_venv_python_executable | default('python3') }}"
 
-adjutant_pip3_packages:
-  - python-adjutant==0.5.0
+adjutant_pip_packages:
+  - python-adjutant
   - cryptography
-  - mod_wsgi
-
-# This variable is used by the repo_build process to determine
-# which host group to check for members of before building the
-# pip packages required by this role. The value is picked up
-# by the py_pkgs lookup.
-adjutant_role_project_group: adjutant_all
+  - systemd-python

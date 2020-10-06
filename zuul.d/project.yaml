@@ -1,5 +1,5 @@
 ---
-# Copyright 2015, Rackspace US, Inc.
+# Copyright 2020, City Network International AB.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,9 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-adjutant_venv_tag: "testing"
-adjutant_developer_mode: true
-adjutant_galera_address: "{{ hostvars[groups['galera_all'][0]]['ansible_host'] }}"
-adjutant_galera_password: "SuperSecrete"
-adjutant_service_password: "secrete"
-adjutant_secret_key: "secretkey"
+- project:
+    templates:
+      - check-requirements
+      - openstack-ansible-linters-jobs
+      - openstack-ansible-deploy-aio_metal-jobs
+      - publish-openstack-docs-pti
+      - release-notes-jobs-python3

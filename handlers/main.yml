@@ -22,13 +22,13 @@
 - name: Stop services
   service:
     name: "{{ item.value.service_name }}"
-    enabled: "{{ (item.value.service_enabled | bool) | ternary('yes', 'no') }}"
+    enabled: yes
     state: "stopped"
     daemon_reload: "{{ (ansible_service_mgr == 'systemd') | ternary('yes', omit) }}"
   with_dict: "{{ adjutant_services }}"
   when: inventory_hostname in groups[item.value.group]
   register: _stop
-  until: _stop | success
+  until: _stop is success
   retries: 5
   delay: 2
 
@@ -43,18 +43,6 @@
     - inventory_hostname in groups[item.value.group]
     - item.value.service_enabled | bool
   register: _start
-  until: _start | success
-  retries: 5
-  delay: 2
-
-- name: Restart Apache
-  service:
-    name: "{{ adjutant_system_service_name }}"
-    enabled: yes
-    state: "restarted"
-    daemon_reload: "{{ (ansible_service_mgr == 'systemd') | ternary('yes', omit) }}"
-  when: adjutant_use_mod_wsgi | bool
-  register: _restart
-  until: _restart | success
+  until: _start is success
   retries: 5
   delay: 2

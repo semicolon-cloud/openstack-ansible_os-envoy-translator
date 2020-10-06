@@ -31,15 +31,14 @@
       config_type: "yaml"
   notify:
     - Restart adjutant services
-    - Restart Apache
 
 - name: Drop Adjutant WSGI Configs
   template:
     src: wsgi.py.j2
-    dest: /var/www/cgi-bin/adjutant/adjutant-api
+    dest: "{{ adjutant_bin }}/adjutant-api-wsgi"
     owner: "{{ adjutant_system_user_name }}"
     group: "{{ adjutant_system_group_name }}"
     mode: "0755"
-  when: adjutant_use_mod_wsgi | bool
+  when: adjutant_use_uwsgi | bool
   notify:
-    - Restart Apache
+    - Restart adjutant services

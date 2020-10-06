@@ -25,7 +25,7 @@ Required Variables
 
     adjutant_service_password
     adjutant_rabbitmq_password
-    adjutant_container_mysql_password
+    adjutant_galera_password
     adjutant_galera_address
 
 Example Playbook
@@ -42,6 +42,6 @@ Example Playbook
         external_lb_vip_address: 172.16.24.1
         internal_lb_vip_address: 192.168.0.1
         adjutant_galera_address: "{{ internal_lb_vip_address }}"
-        adjutant_container_mysql_password: "SuperSecretePassword1"
+        adjutant_galera_password: "SuperSecretePassword1"
         adjutant_service_password: "SuperSecretePassword2"
         adjutant_rabbitmq_password: "SuperSecretePassword3"

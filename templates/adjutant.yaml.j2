@@ -10,15 +10,34 @@ django:
       ENGINE: django.db.backends.mysql
       HOST: '{{ adjutant_galera_address }}'
       NAME: '{{ adjutant_galera_database }}'
-      PASSWORD: '{{ adjutant_container_mysql_password }}'
+      PASSWORD: '{{ adjutant_galera_password }}'
       USER: '{{ adjutant_galera_user }}'
-  log_file: adjutant.log
+  logging:
+    version: 1
+    disable_existing_loggers: False
+    handlers:
+      syslog:
+        class: logging.handlers.SysLogHandler
+        address: /dev/log
+    loggers:
+      adjutant:
+        handlers:
+          - syslog
+        propagate: False
+      django:
+        handlers:
+          - syslog
+        propagate: False
+      keystonemiddleware:
+        handlers:
+          - syslog
+        propagate: False
   email:
     email_backend: {{ adjutant_email_backend }}
     host: {{ adjutant_email_host }}
     port: {{ adjutant_email_port }}
     host_user: {{ adjutant_email_host_user }}
-    host_password: {{ adjutant_email_host_password }}
+    host_password: {{ adjutant_email_host_password | default('') }}
     use_tls: {{ adjutant_email_use_tls }}
     use_ssl: {{ adjutant_email_use_ssl }}
 
