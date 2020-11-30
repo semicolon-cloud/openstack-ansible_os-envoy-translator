@@ -31,6 +31,7 @@
       config_type: "yaml"
   notify:
     - Restart adjutant services
+    - Restart uwsgi services
 
 - name: Drop Adjutant WSGI Configs
   template:
@@ -42,3 +43,4 @@
   when: adjutant_use_uwsgi | bool
   notify:
     - Restart adjutant services
+    - Restart uwsgi services

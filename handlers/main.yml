@@ -13,12 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Restart adjutant services
-  command: "/bin/true"
-  notify:
-    - Stop services
-    - Start services
-
 - name: Stop services
   service:
     name: "{{ item.value.service_name }}"
@@ -31,6 +25,8 @@
   until: _stop is success
   retries: 5
   delay: 2
+  listen:
+    - Restart adjutant services
 
 - name: Start services
   service:
@@ -46,3 +42,5 @@
   until: _start is success
   retries: 5
   delay: 2
+  listen:
+    - Restart adjutant services
