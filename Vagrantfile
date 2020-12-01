@@ -1,6 +1,6 @@
 # Note:
 # This file is maintained in the openstack-ansible-tests repository.
-# https://git.openstack.org/cgit/openstack/openstack-ansible-tests/tree/Vagrantfile
+# https://opendev.org/openstack/openstack-ansible-tests/src/Vagrantfile
 #
 # If you need to perform any change on it, you should modify the central file,
 # then, an OpenStack CI job will propagate your changes to every OSA repository
@@ -16,8 +16,10 @@ end
 
 Vagrant.configure(2) do |config|
   config.vm.provider "virtualbox" do |v|
-    v.memory = 4096
+    v.memory = 6144
     v.cpus = 2
+    # https://github.com/hashicorp/vagrant/issues/9524
+    v.customize ["modifyvm", :id, "--audio", "none"]
   end
 
   config.vm.synced_folder ".", "/vagrant", type: "rsync"
@@ -29,21 +31,32 @@ Vagrant.configure(2) do |config|
          ./run_tests.sh
       SHELL
 
-  config.vm.define "ubuntu1604" do |xenial|
-    xenial.disksize.size = "40GB"
-    xenial.vm.box = "ubuntu/xenial64"
+  config.vm.define "centos8" do |centos8|
+    centos8.vm.box = "centos/8"
   end
 
-  config.vm.define "opensuse422" do |leap422|
-    leap422.vm.box = "opensuse/openSUSE-42.2-x86_64"
+  config.vm.define "debian8" do |debian8|
+    debian8.vm.box = "debian/jessie64"
   end
 
-  config.vm.define "opensuse423" do |leap423|
-    leap423.vm.box = "opensuse/openSUSE-42.3-x86_64"
+  config.vm.define "debian9" do |debian9|
+    debian9.vm.box = "debian/stretch64"
   end
 
-  config.vm.define "centos7" do |centos7|
-    centos7.vm.box = "centos/7"
+  config.vm.define "gentoo" do |gentoo|
+    gentoo.vm.box = "generic/gentoo"
   end
 
+  config.vm.define "opensuse150" do |leap150|
+    leap150.vm.box = "opensuse/openSUSE-15.0-x86_64"
+  end
+
+  config.vm.define "opensuse151" do |leap151|
+    leap151.vm.box = "opensuse/openSUSE-15.1-x86_64"
+  end
+
+  config.vm.define "ubuntu1804" do |bionic|
+    bionic.disksize.size = "40GB"
+    bionic.vm.box = "ubuntu/bionic64"
+  end
 end
