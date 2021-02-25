@@ -47,20 +47,7 @@
   tags:
     - adjutant-install
 
-- name: Install the python venv
-  import_role:
-    name: "python_venv_build"
-  vars:
-    venv_python_executable: "{{ adjutant_venv_python_executable }}"
-    venv_build_constraints: "{{ adjutant_git_constraints }}"
-    venv_build_distro_package_list: "{{ adjutant_devel_distro_packages }}"
-    venv_install_destination_path: "{{ adjutant_bin | dirname }}"
-    venv_pip_install_args: "{{ adjutant_pip_install_args }}"
-    venv_pip_packages: "{{ adjutant_pip_packages }}"
-    venv_facts_when_changed:
-      - section: "adjutant"
-        option: "venv_tag"
-        value: "{{ adjutant_venv_tag }}"
+- import_tasks: adjutant_install.yml
   tags:
     - adjutant-install
 

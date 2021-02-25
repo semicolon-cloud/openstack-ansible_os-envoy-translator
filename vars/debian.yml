@@ -16,6 +16,10 @@
 ## APT Cache options
 cache_timeout: 600
 
+adjutant_distro_packages:
+  - python3-dev
+  - g++
+
 adjutant_devel_distro_packages:
   - cmake
   - gcc

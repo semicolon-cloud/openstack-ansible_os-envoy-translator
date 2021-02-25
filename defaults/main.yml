@@ -35,7 +35,6 @@ adjutant_git_repo: https://opendev.org/openstack/adjutant
 adjutant_git_install_branch: master
 adjutant_upper_constraints_url: "{{ requirements_git_url | default('https://releases.openstack.org/constraints/upper/' ~ requirements_git_install_branch | default('master')) }}"
 adjutant_git_constraints:
-  - "git+{{ adjutant_git_repo }}@{{ adjutant_git_install_branch }}#egg=adjutant"
   - "--constraint {{ adjutant_upper_constraints_url }}"
 
 adjutant_user_domain_name: Default
@@ -255,6 +254,9 @@ adjutant_pip_install_args: "{{ pip_install_options | default('') }}"
 adjutant_venv_python_executable: "{{ openstack_venv_python_executable | default('python3') }}"
 
 adjutant_pip_packages:
-  - python-adjutant
+  - "git+{{ adjutant_git_repo }}@{{ adjutant_git_install_branch }}#egg=python-adjutant"
   - cryptography
   - systemd-python
+
+adjutant_pip_extra_packages:
+    - mysqlclient
