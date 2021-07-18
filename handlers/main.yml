@@ -15,12 +15,11 @@
 
 - name: Stop services
   service:
-    name: "{{ item.value.service_name }}"
-    enabled: yes
+    name: "{{ item.service_name }}"
+    enabled: "{{ item.service_enabled | bool }}"
     state: "stopped"
-    daemon_reload: "{{ (ansible_service_mgr == 'systemd') | ternary('yes', omit) }}"
-  with_dict: "{{ adjutant_services }}"
-  when: inventory_hostname in groups[item.value.group]
+    daemon_reload: yes
+  with_items: "{{ filtered_adjutant_services }}"
   register: _stop
   until: _stop is success
   retries: 5
@@ -30,14 +29,13 @@
 
 - name: Start services
   service:
-    name: "{{ item.value.service_name }}"
+    name: "{{ item.service_name }}"
     enabled: yes
     state: "started"
-    daemon_reload: "{{ (ansible_service_mgr == 'systemd') | ternary('yes', omit) }}"
-  with_dict: "{{ adjutant_services }}"
+    daemon_reload: yes
+  with_items: "{{ filtered_adjutant_services }}"
   when:
-    - inventory_hostname in groups[item.value.group]
-    - item.value.service_enabled | bool
+    - item.service_enabled | bool
   register: _start
   until: _start is success
   retries: 5
