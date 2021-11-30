@@ -16,7 +16,7 @@
 # limitations under the License.
 
 - name: Drop adjutant Config(s)
-  config_template:
+  openstack.config_template.config_template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
     owner: "{{ adjutant_system_user_name }}"
