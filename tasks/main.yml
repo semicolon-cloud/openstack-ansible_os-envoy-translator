@@ -27,7 +27,12 @@
   tags:
     - always
 
-- import_tasks: db_setup.yml
+- include_role:
+    name: openstack.osa.db_setup
+    apply:
+      tags:
+        - common-db
+        - adjutant-config
   when: _adjutant_is_first_play_host
   vars:
     _oslodb_setup_host: "{{ adjutant_galera_setup_host }}"
@@ -40,8 +45,7 @@
           - username: "{{ adjutant_galera_user }}"
             password: "{{ adjutant_galera_password }}"
   tags:
-    - common-db
-    - adjutant-config
+    - always
 
 - import_tasks: adjutant_pre_install.yml
   tags:
@@ -60,7 +64,12 @@
   tags:
     - adjutant-config
 
-- import_tasks: service_setup.yml
+- include_role:
+    name: openstack.osa.service_setup
+    apply:
+      tags:
+        - common-service
+        - adjutant-config
   vars:
     _service_adminuri_insecure: "{{ keystone_service_adminuri_insecure }}"
     _service_in_ldap: "{{ adjutant_service_in_ldap }}"
@@ -90,7 +99,7 @@
         service: "{{ adjutant_service_name }}"
   when: _adjutant_is_first_play_host
   tags:
-    - adjutant-config
+    - always
 
 - name: Run the systemd service role
   include_role:
