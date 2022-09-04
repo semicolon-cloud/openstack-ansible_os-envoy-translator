@@ -14,12 +14,12 @@
 # limitations under the License.
 
 # Setup the host
-- include: common/test-setup-host.yml
+- ansible.builtin.include_tasks: common/test-setup-host.yml
 
 # Install RabbitMQ/MariaDB
-- include: common/test-install-infra.yml
+- ansible.builtin.include_tasks: common/test-install-infra.yml
 
 # Install Keystone
-- include: common/test-install-keystone.yml
+- ansible.builtin.include_tasks: common/test-install-keystone.yml
 
-- include: test-install-adjutant.yml
+- ansible.builtin.include_tasks: test-install-adjutant.yml

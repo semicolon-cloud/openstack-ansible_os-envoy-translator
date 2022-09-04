@@ -17,8 +17,8 @@
   hosts: adjutant_all
   user: root
   pre_tasks:
-    - include: common-tasks/os-lxc-container-setup.yml
-    - include: common-tasks/os-log-dir-setup.yml
+    - ansible.builtin.include_tasks: common-tasks/os-lxc-container-setup.yml
+    - ansible.builtin.include_tasks: common-tasks/os-log-dir-setup.yml
       vars:
         log_dirs:
           - src: "/openstack/log/{{ inventory_hostname }}-adjutant"
