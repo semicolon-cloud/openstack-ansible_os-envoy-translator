@@ -77,7 +77,7 @@ adjutant_horizon_publicurl: "{{ openstack_service_publicuri_proto | default(adju
 # uWSGI settings
 adjutant_wsgi_threads: 1
 adjutant_wsgi_processes_max: 16
-adjutant_wsgi_processes: "{{ [[(ansible_processor_vcpus//ansible_processor_threads_per_core)|default(1), 1] | max * 2, adjutant_wsgi_processes_max] | min }}"
+adjutant_wsgi_processes: "{{ [[(ansible_facts['processor_vcpus']//ansible_facts['processor_threads_per_core'])|default(1), 1] | max * 2, adjutant_wsgi_processes_max] | min }}"
 adjutant_use_uwsgi: True
 
 adjutant_email_backend: django.core.mail.backends.smtp.EmailBackend
