@@ -58,6 +58,26 @@
   tags:
     - adjutant-install
 
+- name: Create and install SSL certificates
+  include_role:
+    name: pki
+    tasks_from: main_certs.yml
+    apply:
+      tags:
+        - adjutant-config
+        - pki
+  vars:
+    pki_setup_host: "{{ adjutant_pki_setup_host }}"
+    pki_dir: "{{ adjutant_pki_dir }}"
+    pki_create_certificates: "{{ adjutant_user_ssl_cert is not defined and adjutant_user_ssl_key is not defined }}"
+    pki_regen_cert: "{{ adjutant_pki_regen_cert }}"
+    pki_certificates: "{{ adjutant_pki_certificates }}"
+    pki_install_certificates: "{{ adjutant_pki_install_certificates }}"
+  when:
+    - adjutant_backend_ssl
+  tags:
+    - always
+
 - import_tasks: adjutant_post_install.yml
   tags:
     - adjutant-config

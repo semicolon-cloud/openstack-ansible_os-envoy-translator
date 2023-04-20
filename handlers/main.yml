@@ -27,6 +27,7 @@
   listen:
     - Restart adjutant services
     - systemd service changed
+    - cert installed
 
 - name: Start services
   service:
@@ -44,3 +45,4 @@
   listen:
     - Restart adjutant services
     - systemd service changed
+    - cert installed

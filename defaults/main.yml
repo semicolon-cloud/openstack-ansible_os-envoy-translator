@@ -79,6 +79,9 @@ adjutant_wsgi_threads: 1
 adjutant_wsgi_processes_max: 16
 adjutant_wsgi_processes: "{{ [[(ansible_facts['processor_vcpus']//ansible_facts['processor_threads_per_core'])|default(1), 1] | max * 2, adjutant_wsgi_processes_max] | min }}"
 adjutant_use_uwsgi: True
+adjutant_uwsgi_tls:
+  crt: "{{ adjutant_ssl_cert }}"
+  key: "{{ adjutant_ssl_key }}"
 
 adjutant_email_backend: django.core.mail.backends.smtp.EmailBackend
 adjutant_email_host: localhost
@@ -249,6 +252,7 @@ adjutant_services:
     uwsgi_overrides: "{{ adjutant_api_uwsgi_ini_overrides }}"
     uwsgi_bind_address: "{{ adjutant_bind_address }}"
     uwsgi_port: "{{ adjutant_service_port }}"
+    uwsgi_tls: "{{ adjutant_backend_ssl | ternary(adjutant_uwsgi_tls, {}) }}"
 
 adjutant_pip_install_args: "{{ pip_install_options | default('') }}"
 adjutant_venv_python_executable: "{{ openstack_venv_python_executable | default('python3') }}"
@@ -260,3 +264,51 @@ adjutant_pip_packages:
 
 adjutant_pip_extra_packages:
     - mysqlclient
+
+###
+### Backend TLS
+###
+
+# Define if communication between haproxy and service backends should be
+# encrypted with TLS.
+adjutant_backend_ssl: "{{ openstack_service_backend_ssl | default(False) }}"
+
+# Storage location for SSL certificate authority
+adjutant_pki_dir: "{{ openstack_pki_dir | default('/etc/openstack_deploy/pki') }}"
+
+# Delegated host for operating the certificate authority
+adjutant_pki_setup_host: "{{ openstack_pki_setup_host | default('localhost') }}"
+
+# adjutant server certificate
+adjutant_pki_keys_path: "{{ adjutant_pki_dir ~ '/certs/private/' }}"
+adjutant_pki_certs_path: "{{ adjutant_pki_dir ~ '/certs/certs/' }}"
+adjutant_pki_intermediate_cert_name: "{{ openstack_pki_service_intermediate_cert_name | default('ExampleCorpIntermediate') }}"
+adjutant_pki_regen_cert: ''
+adjutant_pki_san: "{{ openstack_pki_san | default('DNS:' ~ ansible_facts['hostname'] ~ ',IP:' ~ management_address) }}"
+adjutant_pki_certificates:
+  - name: "adjutant_{{ ansible_facts['hostname'] }}"
+    provider: ownca
+    cn: "{{ ansible_facts['hostname'] }}"
+    san: "{{ adjutant_pki_san }}"
+    signed_by: "{{ adjutant_pki_intermediate_cert_name }}"
+
+# adjutant destination files for SSL certificates
+adjutant_ssl_cert: /etc/adjutant/adjutant.pem
+adjutant_ssl_key: /etc/adjutant/adjutant.key
+
+# Installation details for SSL certificates
+adjutant_pki_install_certificates:
+  - src: "{{ adjutant_user_ssl_cert | default(adjutant_pki_certs_path ~ 'adjutant_' ~ ansible_facts['hostname'] ~ '-chain.crt') }}"
+    dest: "{{ adjutant_ssl_cert }}"
+    owner: "{{ adjutant_system_user_name }}"
+    group: "{{ adjutant_system_user_name }}"
+    mode: "0644"
+  - src: "{{ adjutant_user_ssl_key | default(adjutant_pki_keys_path ~ 'adjutant_' ~ ansible_facts['hostname'] ~ '.key.pem') }}"
+    dest: "{{ adjutant_ssl_key }}"
+    owner: "{{ adjutant_system_user_name }}"
+    group: "{{ adjutant_system_user_name }}"
+    mode: "0600"
+
+# Define user-provided SSL certificates
+#adjutant_user_ssl_cert: <path to cert on ansible deployment host>
+#adjutant_user_ssl_key: <path to cert on ansible deployment host>
