@@ -30,7 +30,8 @@
   tags:
     - always
 
-- include_role:
+- name: Including osa.db_setup role
+  include_role:
     name: openstack.osa.db_setup
     apply:
       tags:
@@ -50,11 +51,13 @@
   tags:
     - always
 
-- import_tasks: adjutant_pre_install.yml
+- name: Importing adjutant_pre_install tasks
+  import_tasks: adjutant_pre_install.yml
   tags:
     - adjutant-install
 
-- import_tasks: adjutant_install.yml
+- name: Importing adjutant_install tasks
+  import_tasks: adjutant_install.yml
   tags:
     - adjutant-install
 
@@ -78,16 +81,19 @@
   tags:
     - always
 
-- import_tasks: adjutant_post_install.yml
+- name: Importing adjutant_post_install tasks
+  import_tasks: adjutant_post_install.yml
   tags:
     - adjutant-config
 
-- import_tasks: adjutant_db_sync.yml
+- name: Importing adjutant_db_sync tasks
+  import_tasks: adjutant_db_sync.yml
   when: _adjutant_is_first_play_host
   tags:
     - adjutant-config
 
-- include_role:
+- name: Including osa.service_setup role
+  include_role:
     name: openstack.osa.service_setup
     apply:
       tags:
@@ -133,10 +139,10 @@
     systemd_tempd_prefix: openstack
     systemd_slice_name: adjutant
     systemd_lock_path: /var/lock/adjutant
-    systemd_CPUAccounting: true
-    systemd_BlockIOAccounting: true
-    systemd_MemoryAccounting: true
-    systemd_TasksAccounting: true
+    systemd_service_cpu_accounting: true
+    systemd_service_block_io_accounting: true
+    systemd_memory_accounting: true
+    systemd_tasks_accounting: true
     systemd_services:
       - service_name: "{{ service_var.service_name }}"
         enabled: "{{ service_var.enabled | default(True) }}"

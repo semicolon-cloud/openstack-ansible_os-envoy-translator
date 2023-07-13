@@ -18,17 +18,17 @@ galaxy_info:
   description: Installation and setup of Adjutant
   company: ELASTX
   license: Apache2
-  min_ansible_version: 2.2
+  role_name: os_adjutant
+  namespace: openstack
+  min_ansible_version: "2.10"
   platforms:
     - name: Ubuntu
       versions:
-        - xenial
-  categories:
+        - focal
+        - jammy
+  galaxy_tags:
     - cloud
     - python
     - adjutant
     - development
     - openstack
-dependencies:
-  - apt_package_pinning
-  - openstack_openrc
