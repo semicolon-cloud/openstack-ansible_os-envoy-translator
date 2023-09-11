@@ -13,7 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-_adjutant_is_first_play_host: "{{ (adjutant_services['adjutant-api']['group'] in group_names and inventory_hostname == (groups[adjutant_services['adjutant-api']['group']] | intersect(ansible_play_hosts)) | first) | bool }}"
+_adjutant_is_first_play_host: >-
+  {{
+    (adjutant_services['adjutant-api']['group'] in group_names and
+    inventory_hostname == (groups[adjutant_services['adjutant-api']['group']] | intersect(ansible_play_hosts)) | first) | bool
+  }}
 
 filtered_adjutant_services: |-
   {% set services = [] %}
