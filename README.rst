@@ -7,26 +7,25 @@ Team and repository tags
 
 .. Change things from this point on
 
-OpenStack-Ansible Adjutant
+OpenStack-Ansible Envoy-Translator
 ############################
-:tags: openstack, adjutant, cloud, ansible
+:tags: openstack, envoy-translator, cloud, ansible
 :category: \*nix
 
-This Ansible role installs and configures OpenStack adjutant.
+This Ansible role installs and configures Semicolon cloud envoy-translator.
 
 This role will install the following Upstart services:
-    * adjutant-api
-    * adjutant-processor
+    * envoy-translator-api
 
 Required Variables
 ==================
 
 .. code-block:: yaml
 
-    adjutant_service_password
-    adjutant_rabbitmq_password
-    adjutant_galera_password
-    adjutant_galera_address
+    envoy-translator_service_password
+    envoy-translator_rabbitmq_password
+    envoy-translator_galera_password
+    envoy-translator_galera_address
 
 Example Playbook
 ================
@@ -34,14 +33,14 @@ Example Playbook
 .. code-block:: yaml
 
     - name: Install adjutant server
-      hosts: adjutant_all
+      hosts: envoy-translator_all
       user: root
       roles:
-        - { role: "os_adjutant", tags: [ "os-adjutant" ] }
+        - { role: "os_envoy-translator", tags: [ "os-envoy-translator" ] }
       vars:
         external_lb_vip_address: 172.16.24.1
         internal_lb_vip_address: 192.168.0.1
-        adjutant_galera_address: "{{ internal_lb_vip_address }}"
-        adjutant_galera_password: "SuperSecretePassword1"
-        adjutant_service_password: "SuperSecretePassword2"
-        adjutant_rabbitmq_password: "SuperSecretePassword3"
+        envoy-translator_galera_address: "{{ internal_lb_vip_address }}"
+        envoy-translator_galera_password: "SuperSecretePassword1"
+        envoy-translator_service_password: "SuperSecretePassword2"
+        envoy-translator_rabbitmq_password: "SuperSecretePassword3"

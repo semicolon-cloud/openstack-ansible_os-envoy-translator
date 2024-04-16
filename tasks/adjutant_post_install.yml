@@ -15,32 +15,32 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Drop adjutant Config(s)
+- name: Drop envoy-translator Config(s)
   openstack.config_template.config_template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
-    owner: "{{ adjutant_system_user_name }}"
-    group: "{{ adjutant_system_group_name }}"
+    owner: "{{ envoy_translator_system_user_name }}"
+    group: "{{ envoy_translator_system_group_name }}"
     mode: "0644"
     config_overrides: "{{ item.config_overrides }}"
     config_type: "{{ item.config_type }}"
   with_items:
-    - src: "adjutant.yaml.j2"
-      dest: "/etc/adjutant/adjutant.yaml"
-      config_overrides: "{{ adjutant_adjutant_conf_overrides }}"
+    - src: "envoy-translator.yaml.j2"
+      dest: "/etc/envoy-translator/envoy-translator.yaml"
+      config_overrides: "{{ envoy_translator_envoy_translator_conf_overrides }}"
       config_type: "yaml"
   notify:
-    - Restart adjutant services
+    - Restart envoy-translator services
     - Restart uwsgi services
 
-- name: Drop Adjutant WSGI Configs
+- name: Drop envoy-translator WSGI Configs
   template:
     src: wsgi.py.j2
-    dest: "{{ adjutant_bin }}/adjutant-api-wsgi"
-    owner: "{{ adjutant_system_user_name }}"
-    group: "{{ adjutant_system_group_name }}"
+    dest: "{{ envoy_translator_bin }}/envoy-translator-api-wsgi"
+    owner: "{{ envoy_translator_system_user_name }}"
+    group: "{{ envoy_translator_system_group_name }}"
     mode: "0755"
-  when: adjutant_use_uwsgi | bool
+  when: envoy_translator_use_uwsgi | bool
   notify:
-    - Restart adjutant services
+    - Restart envoy-translator services
     - Restart uwsgi services

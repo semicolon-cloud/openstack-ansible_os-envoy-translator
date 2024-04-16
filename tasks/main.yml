@@ -36,30 +36,30 @@
     apply:
       tags:
         - common-db
-        - adjutant-config
-  when: _adjutant_is_first_play_host
+        - envoy-translator-config
+  when: _envoy_translator_is_first_play_host
   vars:
-    _oslodb_setup_host: "{{ adjutant_galera_setup_host }}"
-    _oslodb_ansible_python_interpreter: "{{ adjutant_galera_setup_python_interpreter }}"
-    _oslodb_setup_endpoint: "{{ adjutant_galera_address }}"
-    _oslodb_setup_port: "{{ adjutant_galera_port }}"
+    _oslodb_setup_host: "{{ envoy_translator_galera_setup_host }}"
+    _oslodb_ansible_python_interpreter: "{{ envoy_translator_galera_setup_python_interpreter }}"
+    _oslodb_setup_endpoint: "{{ envoy_translator_galera_address }}"
+    _oslodb_setup_port: "{{ envoy_translator_galera_port }}"
     _oslodb_databases:
-      - name: "{{ adjutant_galera_database }}"
+      - name: "{{ envoy_translator_galera_database }}"
         users:
-          - username: "{{ adjutant_galera_user }}"
-            password: "{{ adjutant_galera_password }}"
+          - username: "{{ envoy_translator_galera_user }}"
+            password: "{{ envoy_translator_galera_password }}"
   tags:
     - always
 
-- name: Importing adjutant_pre_install tasks
-  import_tasks: adjutant_pre_install.yml
+- name: Importing envoy_translator_pre_install tasks
+  import_tasks: envoy_translator_pre_install.yml
   tags:
-    - adjutant-install
+    - envoy-translator-install
 
-- name: Importing adjutant_install tasks
-  import_tasks: adjutant_install.yml
+- name: Importing envoy_translator_install tasks
+  import_tasks: envoy_translator_install.yml
   tags:
-    - adjutant-install
+    - envoy-translator-install
 
 - name: Create and install SSL certificates
   include_role:
@@ -67,30 +67,30 @@
     tasks_from: main_certs.yml
     apply:
       tags:
-        - adjutant-config
+        - envoy-translator-config
         - pki
   vars:
-    pki_setup_host: "{{ adjutant_pki_setup_host }}"
-    pki_dir: "{{ adjutant_pki_dir }}"
-    pki_create_certificates: "{{ adjutant_user_ssl_cert is not defined and adjutant_user_ssl_key is not defined }}"
-    pki_regen_cert: "{{ adjutant_pki_regen_cert }}"
-    pki_certificates: "{{ adjutant_pki_certificates }}"
-    pki_install_certificates: "{{ adjutant_pki_install_certificates }}"
+    pki_setup_host: "{{ envoy_translator_pki_setup_host }}"
+    pki_dir: "{{ envoy_translator_pki_dir }}"
+    pki_create_certificates: "{{ envoy_translator_user_ssl_cert is not defined and envoy_translator_user_ssl_key is not defined }}"
+    pki_regen_cert: "{{ envoy_translator_pki_regen_cert }}"
+    pki_certificates: "{{ envoy_translator_pki_certificates }}"
+    pki_install_certificates: "{{ envoy_translator_pki_install_certificates }}"
   when:
-    - adjutant_backend_ssl
+    - envoy_translator_backend_ssl
   tags:
     - always
 
-- name: Importing adjutant_post_install tasks
-  import_tasks: adjutant_post_install.yml
+- name: Importing envoy_translator_post_install tasks
+  import_tasks: envoy_translator_post_install.yml
   tags:
-    - adjutant-config
+    - envoy-translator-config
 
-- name: Importing adjutant_db_sync tasks
-  import_tasks: adjutant_db_sync.yml
-  when: _adjutant_is_first_play_host
+- name: Importing envoy_translator_db_sync tasks
+  import_tasks: envoy_translator_db_sync.yml
+  when: _envoy_translator_is_first_play_host
   tags:
-    - adjutant-config
+    - envoy-translator-config
 
 - name: Including osa.service_setup role
   include_role:
@@ -98,35 +98,35 @@
     apply:
       tags:
         - common-service
-        - adjutant-config
+        - envoy-translator-config
   vars:
     _service_adminuri_insecure: "{{ keystone_service_adminuri_insecure }}"
-    _service_in_ldap: "{{ adjutant_service_in_ldap }}"
-    _service_setup_host: "{{ adjutant_service_setup_host }}"
-    _service_setup_host_python_interpreter: "{{ adjutant_service_setup_host_python_interpreter }}"
-    _service_project_name: "{{ adjutant_service_project_name }}"
-    _service_region: "{{ adjutant_service_region }}"
+    _service_in_ldap: "{{ envoy_translator_service_in_ldap }}"
+    _service_setup_host: "{{ envoy_translator_service_setup_host }}"
+    _service_setup_host_python_interpreter: "{{ envoy_translator_service_setup_host_python_interpreter }}"
+    _service_project_name: "{{ envoy_translator_service_project_name }}"
+    _service_region: "{{ envoy_translator_service_region }}"
     _service_users:
-      - name: "{{ adjutant_service_user_name }}"
-        password: "{{ adjutant_service_password }}"
-        role: "{{ adjutant_role_name }}"
+      - name: "{{ envoy_translator_service_user_name }}"
+        password: "{{ envoy_translator_service_password }}"
+        role: "{{ envoy_translator_role_name }}"
       - role: "project_mod"
       - role: "project_admin"
     _service_catalog:
-      - name: "{{ adjutant_service_name }}"
-        type: "{{ adjutant_service_type }}"
-        description: "{{ adjutant_service_description }}"
+      - name: "{{ envoy_translator_service_name }}"
+        type: "{{ envoy_translator_service_type }}"
+        description: "{{ envoy_translator_service_description }}"
     _service_endpoints:
       - interface: "public"
-        url: "{{ adjutant_service_publicurl }}"
-        service: "{{ adjutant_service_name }}"
+        url: "{{ envoy_translator_service_publicurl }}"
+        service: "{{ envoy_translator_service_name }}"
       - interface: "internal"
-        url: "{{ adjutant_service_internalurl }}"
-        service: "{{ adjutant_service_name }}"
+        url: "{{ envoy_translator_service_internalurl }}"
+        service: "{{ envoy_translator_service_name }}"
       - interface: "admin"
-        url: "{{ adjutant_service_adminurl }}"
-        service: "{{ adjutant_service_name }}"
-  when: _adjutant_is_first_play_host
+        url: "{{ envoy_translator_service_adminurl }}"
+        service: "{{ envoy_translator_service_name }}"
+  when: _envoy_translator_is_first_play_host
   tags:
     - always
 
@@ -134,11 +134,11 @@
   include_role:
     name: systemd_service
   vars:
-    systemd_user_name: "{{ adjutant_system_user_name }}"
-    systemd_group_name: "{{ adjutant_system_group_name }}"
+    systemd_user_name: "{{ envoy_translator_system_user_name }}"
+    systemd_group_name: "{{ envoy_translator_system_group_name }}"
     systemd_tempd_prefix: openstack
-    systemd_slice_name: adjutant
-    systemd_lock_path: /var/lock/adjutant
+    systemd_slice_name: envoy-translator
+    systemd_lock_path: /var/lock/envoy-translator
     systemd_service_cpu_accounting: true
     systemd_service_block_io_accounting: true
     systemd_memory_accounting: true
@@ -150,22 +150,22 @@
         execstarts: "{{ service_var.execstarts }}"
         execreloads: "{{ service_var.execreloads | default([]) }}"
         config_overrides: "{{ service_var.init_config_overrides }}"
-  with_items: "{{ filtered_adjutant_services }}"
+  with_items: "{{ filtered_envoy_translator_services }}"
   loop_control:
     loop_var: service_var
   tags:
-    - adjutant-config
+    - envoy-translator-config
     - systemd-service
 
 - name: Import uwsgi role
   import_role:
     name: uwsgi
   vars:
-    uwsgi_services: "{{ uwsgi_adjutant_services }}"
+    uwsgi_services: "{{ uwsgi_envoy_translator_services }}"
     uwsgi_install_method: "source"
   tags:
-    - adjutant-install
-    - adjutant-config
+    - envoy-translator-install
+    - envoy-translator-config
     - uwsgi
 
 - name: Flush handlers

@@ -17,28 +17,28 @@
 
 - name: Create the system group
   group:
-    name: "{{ adjutant_system_group_name }}"
+    name: "{{ envoy_translator_system_group_name }}"
     state: "present"
     system: "yes"
 
-- name: Create the adjutant system user
+- name: Create the envoy-translator system user
   user:
-    name: "{{ adjutant_system_user_name }}"
-    group: "{{ adjutant_system_group_name }}"
-    comment: "{{ adjutant_system_comment }}"
-    shell: "{{ adjutant_system_shell }}"
+    name: "{{ envoy_translator_system_user_name }}"
+    group: "{{ envoy_translator_system_group_name }}"
+    comment: "{{ envoy_translator_system_comment }}"
+    shell: "{{ envoy_translator_system_shell }}"
     system: "yes"
     createhome: "yes"
-    home: "{{ adjutant_system_home_folder }}"
+    home: "{{ envoy_translator_system_home_folder }}"
 
-- name: Create adjutant dir
+- name: Create envoy-translator dir
   file:
     path: "{{ item.path }}"
     state: directory
-    owner: "{{ item.owner | default(adjutant_system_user_name) }}"
-    group: "{{ item.group | default(adjutant_system_group_name) }}"
+    owner: "{{ item.owner | default(envoy_translator_system_user_name) }}"
+    group: "{{ item.group | default(envoy_translator_system_group_name) }}"
     mode: "{{ item.mode | default('0755') }}"
   with_items:
     - { path: "/openstack", mode: "0755", owner: "root", group: "root" }
-    - { path: "/etc/adjutant" }
-    - { path: "/var/log/adjutant" }
+    - { path: "/etc/envoy_translator" }
+    - { path: "/var/log/envoy_translator" }

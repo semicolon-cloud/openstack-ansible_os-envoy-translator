@@ -17,23 +17,23 @@
   import_role:
     name: "python_venv_build"
   vars:
-    venv_python_executable: "{{ adjutant_venv_python_executable }}"
-    venv_build_constraints: "{{ adjutant_git_constraints }}"
-    venv_build_distro_package_list: "{{ adjutant_devel_distro_packages }}"
-    venv_install_destination_path: "{{ adjutant_bin | dirname }}"
-    venv_pip_install_args: "{{ adjutant_pip_install_args }}"
-    venv_pip_packages: "{{ adjutant_pip_packages }}"
+    venv_python_executable: "{{ envoy_translator_venv_python_executable }}"
+    venv_build_constraints: "{{ envoy_translator_git_constraints }}"
+    venv_build_distro_package_list: "{{ envoy_translator_devel_distro_packages }}"
+    venv_install_destination_path: "{{ envoy_translator_bin | dirname }}"
+    venv_pip_install_args: "{{ envoy_translator_pip_install_args }}"
+    venv_pip_packages: "{{ envoy_translator_pip_packages }}"
     venv_facts_when_changed:
-      - section: "adjutant"
+      - section: "envoy-translator"
         option: "venv_tag"
-        value: "{{ adjutant_venv_tag }}"
+        value: "{{ envoy_translator_venv_tag }}"
   tags:
-    - adjutant-install
+    - envoy-translator-install
 
 # NOTE(noonedeadpunk): We perform all these tasks as mysqlclient library requires
 # mysql-dev to be installed both during wheels build and runtime (wheel installation).
 # To reduce places where we need mysql-devel, we install mysqlclient separately inside
-# venv on the adjutant containers directly.
+# venv on the envoy-translator containers directly.
 - name: Install maria devel packages
   import_role:
     name: galera_server
@@ -42,8 +42,8 @@
 
 - name: Install distro packages for extra package build
   package:
-    name: "{{ adjutant_distro_packages }}"
-    state: "{{ adjutant_package_state }}"
+    name: "{{ envoy_translator_distro_packages }}"
+    state: "{{ envoy_translator_package_state }}"
     update_cache: "{{ (ansible_facts['pkg_mgr'] == 'apt') | ternary('yes', omit) }}"
     cache_valid_time: "{{ (ansible_facts['pkg_mgr'] == 'apt') | ternary(cache_timeout, omit) }}"
   register: _install_distro_packages
@@ -53,7 +53,7 @@
 
 - name: Install extra pip packages into build venv
   pip:
-    virtualenv: "{{ adjutant_bin | dirname }}"
-    name: "{{ adjutant_pip_extra_packages }}"
+    virtualenv: "{{ envoy_translator_bin | dirname }}"
+    name: "{{ envoy_translator_pip_extra_packages }}"
     state: present
-    extra_args: "{{ (adjutant_git_constraints + [adjutant_pip_install_args]) | join(' ') }}"
+    extra_args: "{{ (envoy_translator_git_constraints + [envoy_translator_pip_install_args]) | join(' ') }}"

@@ -15,8 +15,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Perform adjutant migrate
-  command: "{{ adjutant_bin }}/adjutant-api migrate"
+- name: Perform envoy-translator migrate
+  command: "{{ envoy_translator_bin }}/envoy-translator-api migrate"
   become: yes
-  become_user: "{{ adjutant_system_user_name }}"
+  become_user: "{{ envoy_translator_system_user_name }}"
   changed_when: false
