@@ -13,15 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-_adjutant_is_first_play_host: >-
+_envoy_translator_is_first_play_host: >-
   {{
-    (adjutant_services['adjutant-api']['group'] in group_names and
-    inventory_hostname == (groups[adjutant_services['adjutant-api']['group']] | intersect(ansible_play_hosts)) | first) | bool
+    (envoy_translator_services['envoy_translator-api']['group'] in group_names and
+    inventory_hostname == (groups[envoy_translator_services['envoy_translator-api']['group']] | intersect(ansible_play_hosts)) | first) | bool
   }}
 
-filtered_adjutant_services: |-
+filtered_envoy_translator_services: |-
   {% set services = [] %}
-  {% for key, value in adjutant_services.items() %}
+  {% for key, value in envoy_translator_services.items() %}
   {%   if (value['group'] in group_names) and
           (('condition' not in value) or
            ('condition' in value and value['condition'])) and
@@ -32,20 +32,20 @@ filtered_adjutant_services: |-
   {% endfor %}
   {{ services | sort(attribute='start_order') }}
 
-uwsgi_adjutant_services: |-
+uwsgi_envoy_translator_services: |-
   {% set services = {} %}
-  {% for key, value in adjutant_services.items() %}
+  {% for key, value in envoy_translator_services.items() %}
   {%   if (value['group'] in group_names) and
          (('condition' not in value) or ('condition' in value and value['condition']))
          and ('wsgi_app' in value and value['wsgi_app']) %}
   {%     set _ = value.update(
            {
-             'wsgi_path':  adjutant_bin ~ '/' ~ value.wsgi_name,
-             'wsgi_venv': adjutant_bin | dirname,
-             'uwsgi_uid': adjutant_system_user_name,
-             'uwsgi_guid': adjutant_system_group_name,
-             'uwsgi_processes': adjutant_wsgi_processes,
-             'uwsgi_threads': adjutant_wsgi_threads,
+             'wsgi_path':  envoy_translator_bin ~ '/' ~ value.wsgi_name,
+             'wsgi_venv': envoy_translator_bin | dirname,
+             'uwsgi_uid': envoy_translator_system_user_name,
+             'uwsgi_guid': envoy_translator_system_group_name,
+             'uwsgi_processes': envoy_translator_wsgi_processes,
+             'uwsgi_threads': envoy_translator_wsgi_threads,
            }
          ) %}
   {%     set _ = services.update({key: value}) %}
