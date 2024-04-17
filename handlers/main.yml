@@ -19,7 +19,7 @@
     enabled: "{{ item.service_enabled | bool }}"
     state: "stopped"
     daemon_reload: yes
-  with_items: "{{ filtered_adjutant_services }}"
+  with_items: "{{ filtered_envoy_translator_services }}"
   register: _stop
   until: _stop is success
   retries: 5
@@ -35,7 +35,7 @@
     enabled: yes
     state: "started"
     daemon_reload: yes
-  with_items: "{{ filtered_adjutant_services }}"
+  with_items: "{{ filtered_envoy_translator_services }}"
   when:
     - item.service_enabled | bool
   register: _start
