@@ -99,14 +99,14 @@ envoy_translator_api_init_overrides: {}
 
 ## Service Name-Group Mapping
 envoy_translator_services:
-  envoy-translator-api:
-    group: envoy_translator_api
-    service_name: envoy-translator-api
+  envoy_translator-api:
+    group: envoy_translater-api
+    service_name: envoy_translater
     service_enabled: true
     init_config_overrides: "{{ envoy_translator_api_init_overrides }}"
-    execstarts: "{{ envoy_translator_bin }}/envoy-translator-api"
+    execstarts: "{{ envoy_translator_bin }}/envoy_translater-api"
     wsgi_app: "{{ envoy_translator_use_uwsgi }}"
-    wsgi_name: envoy-translator-api-wsgi
+    wsgi_name: envoy_translater-api-wsgi
     uwsgi_overrides: "{{ envoy_translator_api_uwsgi_ini_overrides }}"
     uwsgi_bind_address: "{{ envoy_translator_bind_address }}"
     uwsgi_port: "{{ envoy_translator_service_port }}"
