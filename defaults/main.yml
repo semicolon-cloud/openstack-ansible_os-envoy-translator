@@ -76,11 +76,11 @@ envoy_translator_service_publicuri_proto: "{{ openstack_service_publicuri_proto 
 envoy_translator_service_adminuri_proto: "{{ openstack_service_adminuri_proto | default(envoy_translator_service_proto) }}"
 envoy_translator_service_internaluri_proto: "{{ openstack_service_internaluri_proto | default(envoy_translator_service_proto) }}"
 envoy_translator_service_publicuri: "{{ envoy_translator_service_publicuri_proto }}://{{ external_lb_vip_address }}:{{ envoy_translator_service_port }}"
-envoy_translator_service_publicurl: "{{ envoy_translator_service_publicuri }}/v1/"
+envoy_translator_service_publicurl: "{{ envoy_translator_service_publicuri }}/"
 envoy_translator_service_adminuri: "{{ envoy_translator_service_adminuri_proto }}://{{ internal_lb_vip_address }}:{{ envoy_translator_service_port }}"
-envoy_translator_service_adminurl: "{{ envoy_translator_service_adminuri }}/v1/"
+envoy_translator_service_adminurl: "{{ envoy_translator_service_adminuri }}/"
 envoy_translator_service_internaluri: "{{ envoy_translator_service_internaluri_proto }}://{{ internal_lb_vip_address }}:{{ envoy_translator_service_port }}"
-envoy_translator_service_internalurl: "{{ envoy_translator_service_internaluri }}/v1/"
+envoy_translator_service_internalurl: "{{ envoy_translator_service_internaluri }}/"
 envoy_translator_horizon_publicurl: "{{ openstack_service_publicuri_proto | default(envoy_translator_service_proto) }}://{{ external_lb_vip_address }}/"
 
 # uWSGI settings
