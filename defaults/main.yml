@@ -151,8 +151,8 @@ envoy_translator_pki_certificates:
     signed_by: "{{ envoy_translator_pki_intermediate_cert_name }}"
 
 # envoy-translator destination files for SSL certificates
-envoy_translator_ssl_cert: /etc/envoy-translator/envoy-translator.pem
-envoy_translator_ssl_key: /etc/envoy-translator/envoy-translator.key
+envoy_translator_ssl_cert: /etc/envoy_translator/envoy-translator.pem
+envoy_translator_ssl_key: /etc/envoy_translator/envoy-translator.key
 
 # Installation details for SSL certificates
 envoy_translator_pki_install_certificates:

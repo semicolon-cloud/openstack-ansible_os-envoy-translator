@@ -26,7 +26,7 @@
     config_type: "{{ item.config_type }}"
   with_items:
     - src: "envoy-translator.yaml.j2"
-      dest: "/etc/envoy-translator/envoy-translator.yaml"
+      dest: "/etc/envoy_translator/envoy-translator.yaml"
       config_overrides: "{{ envoy_translator_envoy_translator_conf_overrides }}"
       config_type: "yaml"
   notify:
