@@ -14,11 +14,11 @@
 # limitations under the License.
 
 galaxy_info:
-  author: holmsten
-  description: Installation and setup of Adjutant
+  author: Siyeong Song
+  description: Installation and setup of Envoy Translator
   company: ELASTX
   license: Apache2
-  role_name: os_adjutant
+  role_name: os_envoy_translator
   namespace: openstack
   min_ansible_version: "2.10"
   platforms:
