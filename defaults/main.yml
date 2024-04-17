@@ -100,7 +100,7 @@ envoy_translator_api_init_overrides: {}
 ## Service Name-Group Mapping
 envoy_translator_services:
   envoy_translator-api:
-    group: envoy_translator-api
+    group: envoy-translator_api
     service_name: envoy_translator
     service_enabled: true
     init_config_overrides: "{{ envoy_translator_api_init_overrides }}"
