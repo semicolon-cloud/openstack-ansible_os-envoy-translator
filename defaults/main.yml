@@ -31,7 +31,7 @@ envoy_translator_system_home_folder: "/var/lib/{{ envoy_translator_system_user_n
 envoy_translator_venv_tag: "{{ venv_tag | default('untagged') }}"
 envoy_translator_bin: "/openstack/venvs/envoy-translator-{{ envoy_translator_venv_tag }}/bin"
 
-envoy_translator_git_repo: https://github.com/semicolon-cloud/envoy_translater
+envoy_translator_git_repo: https://github.com/semicolon-cloud/envoy_translator
 envoy_translator_git_install_branch: main
 envoy_translator_upper_constraints_url: >-
   {{ requirements_git_url | default('https://releases.openstack.org/constraints/upper/' ~ requirements_git_install_branch | default('master')) }}
