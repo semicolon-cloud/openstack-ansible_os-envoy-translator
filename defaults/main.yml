@@ -61,7 +61,7 @@ envoy_translator_service_region: "{{ service_region | default('RegionOne') }}"
 envoy_translator_service_name: envoy-translator
 envoy_translator_service_type: external
 envoy_translator_service_description: "envoy-translator External Exposal Service"
-envoy_translator_service_port: 5050
+envoy_translator_service_port: 8090
 envoy_translator_service_project_name: service
 envoy_translator_service_in_ldap: "{{ service_ldap_backend_enabled | default(False) }}"
 envoy_translator_service_setup_host: "{{ openstack_service_setup_host | default('localhost') }}"
