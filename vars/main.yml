@@ -15,8 +15,8 @@
 
 _envoy_translator_is_first_play_host: >-
   {{
-    (envoy_translator_services['envoy_translator-api']['group'] in group_names and
-    inventory_hostname == (groups[envoy_translator_services['envoy_translator-api']['group']] | intersect(ansible_play_hosts)) | first) | bool
+    (envoy_translator_services['envoy_translator']['group'] in group_names and
+    inventory_hostname == (groups[envoy_translator_services['envoy_translator']['group']] | intersect(ansible_play_hosts)) | first) | bool
   }}
 
 filtered_envoy_translator_services: |-
