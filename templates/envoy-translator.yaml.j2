@@ -1,5 +1,5 @@
 django:
-  secret_key: '{{ adjutant_secret_key }}'
+  secret_key: '{{ envoy_translator_secret_key }}'
   debug: False
   allowed_hosts:
     - '*'
@@ -8,11 +8,11 @@ django:
   databases:
     default:
       ENGINE: django.db.backends.mysql
-      HOST: '{{ adjutant_galera_address }}'
-      NAME: '{{ adjutant_galera_database }}'
-      PASSWORD: '{{ adjutant_galera_password }}'
-      USER: '{{ adjutant_galera_user }}'
-      PORT: '{{ adjutant_galera_port }}'
+      HOST: '{{ envoy_translator_galera_address }}'
+      NAME: '{{ envoy_translator_galera_database }}'
+      PASSWORD: '{{ envoy_translator_galera_password }}'
+      USER: '{{ envoy_translator_galera_user }}'
+      PORT: '{{ envoy_translator_galera_port }}'
   logging:
     version: 1
     disable_existing_loggers: False
@@ -36,9 +36,9 @@ django:
 
 identity:
   auth:
-    username: {{ adjutant_service_user_name }}
-    password: {{ adjutant_service_password }}
+    username: {{ envoy_translator_service_user_name }}
+    password: {{ envoy_translator_service_password }}
     project_name: service
     project_domain_id: default
-    user_domain_id: {{ adjutant_user_domain_id }}
+    user_domain_id: {{ envoy_translator_user_domain_id }}
     auth_url: {{ keystone_service_adminurl }}
